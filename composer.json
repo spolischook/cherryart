@@ -1,9 +1,15 @@
 {
     "name": "spolischook/cherryart",
     "description": "Personal site for Tetiana Cherevan",
+    "homepage": "http://cherry-t-art.com/",
     "type": "project",
     "require": {
+        "php": ">=7.0",
+        "silex/silex": "~2.0",
         "twig/twig": "^1.29"
+    },
+    "autoload": {
+        "psr-4": { "Cherry\\": "src/Cherry/"}
     },
     "license": "MIT",
     "authors": [
@@ -11,5 +17,8 @@
             "name": "Serhii Polishchuk",
             "email": "spolischook@gmail.com"
         }
-    ]
+    ],
+    "config": {
+        "bin-dir": "bin"
+    }
 }
