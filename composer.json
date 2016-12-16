@@ -1,0 +1,15 @@
+{
+    "name": "spolischook/cherryart",
+    "description": "Personal site for Tetiana Cherevan",
+    "type": "project",
+    "require": {
+        "twig/twig": "^1.29"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Serhii Polishchuk",
+            "email": "spolischook@gmail.com"
+        }
+    ]
+}
