@@ -1,1 +1,7 @@
-<h1>This is a dashboard</h1>
+{% extends "Admin/adminLayout.html.twig" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+    <h1>Dashboard</h1>
+
+    <a href="{{ path('admin_art_works') }}">List of Art Works</a>
+{% endblock %}
