@@ -6,7 +6,8 @@
     "require": {
         "php": ">=7.0",
         "silex/silex": "~2.0",
-        "twig/twig": "^1.29"
+        "twig/twig": "^1.29",
+        "symfony/twig-bridge": "^3.2"
     },
     "autoload": {
         "psr-4": { "Cherry\\": "src/Cherry/"}
