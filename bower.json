@@ -1,0 +1,21 @@
+{
+  "name": "cherryart",
+  "description": "Personal site for Tetiana Cherevan",
+  "main": "index.js",
+  "authors": [
+    "Serhii Polishchuk"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/spolischook/cherryart",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "v4.0.0-alpha.5"
+  }
+}
