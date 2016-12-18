@@ -3,6 +3,7 @@
 namespace Cherry\Controller;
 
 use Cherry\Application;
+use Cherry\Form\ArtWorkType;
 
 class AdminController
 {
@@ -37,6 +38,13 @@ class AdminController
                     'in_stock' => true,
                 ],
             ]
+        ]);
+    }
+
+    public function createArtWork(Application $app)
+    {
+        return $app['twig']->render('Admin/artWorkCreate.html.twig', [
+            'form' => $app->form([], [], ArtWorkType::class)->getForm()->createView(),
         ]);
     }
 }

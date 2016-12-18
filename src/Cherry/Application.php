@@ -3,11 +3,12 @@
 namespace Cherry;
 
 use Silex\Application as BaseApplication;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Silex\Application\FormTrait;
 
 class Application extends BaseApplication
 {
+    use FormTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -15,8 +16,15 @@ class Application extends BaseApplication
     {
         parent::__construct($values);
 
+        $this->register(new \Silex\Provider\FormServiceProvider());
         $this->register(new \Silex\Provider\TwigServiceProvider(), [
             'twig.path' => __DIR__.'/Resources/views',
+            'twig.form.templates' => ['bootstrap_3_layout.html.twig'],
+        ]);
+        $this->register(new \Silex\Provider\ValidatorServiceProvider());
+        $this->register(new \Silex\Provider\LocaleServiceProvider());
+        $this->register(new \Silex\Provider\TranslationServiceProvider(), [
+            'translator.domains' => [],
         ]);
 
         $this->register(new \Silex\Provider\SessionServiceProvider());
@@ -47,5 +55,6 @@ class Application extends BaseApplication
 
         $this->get('/admin', 'Cherry\\Controller\\AdminController::dashboardAction')->bind('admin_dashboard');
         $this->get('/admin/art-works', 'Cherry\\Controller\\AdminController::listArtWorks')->bind('admin_art_works');
+        $this->get('/admin/art-works/new', 'Cherry\\Controller\\AdminController::createArtWork')->bind('admin_create_work');
     }
 }
