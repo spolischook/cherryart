@@ -2,6 +2,9 @@
 
 namespace Cherry;
 
+use Cherry\Form\ArtWorkType;
+use Intervention\Image\Constraint;
+use Intervention\Image\Image;
 use Silex\Application as BaseApplication;
 use Silex\Application\FormTrait;
 
@@ -15,6 +18,7 @@ class Application extends BaseApplication
     public function __construct(array $values = [])
     {
         parent::__construct($values);
+        $app = $this;
 
         $this->register(new \Silex\Provider\FormServiceProvider());
         $this->register(new \Silex\Provider\TwigServiceProvider(), [
@@ -26,6 +30,35 @@ class Application extends BaseApplication
         $this->register(new \Silex\Provider\TranslationServiceProvider(), [
             'translator.domains' => [],
         ]);
+
+        $this->register(new \Silex\Provider\DoctrineServiceProvider(), array(
+            'db.options' => array(
+                'driver'   => 'pdo_sqlite',
+                'path'     => realpath(__DIR__.'/../../app.db'),
+            ),
+        ));
+
+        $this['image_handler'] = function () {
+            return new ImageHandler(
+                realpath(__DIR__.'/../../image_originals'),
+                realpath(__DIR__.'/../../web/images'),
+                '/images',
+                [
+                    'admin' => function (Image $image) {
+                        return $image->heighten(70)->crop(70, 70);
+                    },
+                ]
+            );
+        };
+
+        $app['art_work_type'] = function ($app) {
+            return new ArtWorkType($app['db'], $app['image_handler']);
+        };
+        $app->extend('form.types', function ($types) use ($app) {
+            $types[] = 'art_work_type';
+
+            return $types;
+        });
 
         $this->register(new \Silex\Provider\SessionServiceProvider());
         $this->register(new \Silex\Provider\SecurityServiceProvider(), [
@@ -55,6 +88,11 @@ class Application extends BaseApplication
 
         $this->get('/admin', 'Cherry\\Controller\\AdminController::dashboardAction')->bind('admin_dashboard');
         $this->get('/admin/art-works', 'Cherry\\Controller\\AdminController::listArtWorks')->bind('admin_art_works');
-        $this->get('/admin/art-works/new', 'Cherry\\Controller\\AdminController::createArtWork')->bind('admin_create_work');
+        $this->match('/admin/art-works/new', 'Cherry\\Controller\\AdminController::createArtWork')
+            ->bind('admin_create_work')
+            ->method('GET|POST');
+        $this->match('/admin/art-works/{slug}', 'Cherry\\Controller\\AdminController::editArtWork')
+            ->bind('admin_edit_work')
+            ->method('GET|POST');
     }
 }

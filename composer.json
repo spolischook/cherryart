@@ -5,6 +5,8 @@
     "type": "project",
     "require": {
         "php": ">=7.0",
+        "ext-pdo_sqlite": "*",
+        "ext-imagick": "*",
         "silex/silex": "~2.0",
         "twig/twig": "^1.29",
         "symfony/twig-bridge": "^3.2",
@@ -12,7 +14,9 @@
         "symfony/form": "^3.2",
         "symfony/validator": "^3.2",
         "symfony/config": "^3.2",
-        "symfony/translation": "^3.2"
+        "symfony/translation": "^3.2",
+        "doctrine/dbal": "~2.2",
+        "intervention/image": "^2.3"
     },
     "autoload": {
         "psr-4": { "Cherry\\": "src/Cherry/"}

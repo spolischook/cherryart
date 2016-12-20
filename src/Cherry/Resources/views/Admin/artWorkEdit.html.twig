@@ -1,33 +1,33 @@
 {% extends "Admin/adminLayout.html.twig" %}
-{% block title %}Add new Art Work{% endblock %}
+{% block title %}{{ "Edit "~form.title.vars.value }}{% endblock %}
 {% block content %}
-    <h1>Add new Art Work</h1>
+    <h1>{{ "Edit "~form.title.vars.value }}</h1>
 
-    <form enctype="multipart/form-data" action="{{ path('admin_create_work') }}" method="post">
-        {{ form_start(form) }}
+    <form enctype="multipart/form-data" action="{{ path('admin_edit_work', {'slug': form.slug.vars.value}) }}" method="post">
+        {{ form_start(form, {'multipart': true}) }}
 
         {{ form_errors(form) }}
 
         {{ form_row(form.title) }}
-        {{ form_row(form.slug) }}
+        {{ form_row(form.slug, { 'attr':{'readonly':'readonly'} }) }}
 
         {{ form_row(form.description) }}
         {{ form_row(form.price) }}
         {{ form_row(form.in_stock) }}
         <div class="form-group">
             {{ form_label(form.picture) }}<br />
+            <img src="{{ app.image_handler.getImageUrl(form.picture.vars.data.fileName, 'art_work', 'admin') }}" class="img-thumbnail">
             {{ form_errors(form.picture) }}
             {{ form_widget(form.picture) }}
         </div>
+        {{ form_row(form.picture) }}
 
         <label>Images</label>
         <ul id="image-fields-list"
             data-prototype="{{ form_widget(form.images.vars.prototype)|e }}">
             {% for image in form.images %}
-                <li>
-                    {{ form_errors(image) }}
-                    {{ form_widget(image) }}
-                </li>
+                    <img src="{{ app.image_handler.getImageUrl(image.vars.data.fileName, 'art_work', 'admin') }}" class="img-thumbnail">
+                    <div style="display: none;">{{ form_row(image) }}</div>
             {% endfor %}
         </ul>
 
