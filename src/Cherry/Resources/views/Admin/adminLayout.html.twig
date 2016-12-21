@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="/admin.ico">
     <title>{% block title %}{% endblock %}</title>
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/admin.css" rel="stylesheet">
 </head>
 
 <body>
@@ -38,8 +39,9 @@
     {% block content %}{% endblock %}
 </div>
 {% block javascript %}
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
+    <script src="/assets/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/assets/ckeditor/ckeditor.js"></script>
 {% endblock %}
 </body>
 </html>

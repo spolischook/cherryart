@@ -9,6 +9,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AdminController
@@ -68,5 +69,28 @@ class AdminController
         return $app['twig']->render('Admin/artWorkCreate.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    public function removeImage($slug, $imageFileNameForDelete, Application $app)
+    {
+        $original = $app['image_handler']->getOriginal($imageFileNameForDelete, ImageHandler::TYPE_ART_WORK);
+
+        if (!is_file($original)) {
+            throw new NotFoundHttpException(sprintf('Image with "%s" name not found', $imageFileNameForDelete));
+        }
+
+        $sql = "SELECT * FROM art_works WHERE slug = ?";
+        $work = $app['db']->fetchAssoc($sql, [$slug]);
+
+        $work['images'] = implode(',', array_filter(
+            explode(',', $work['images']),
+            function ($imageName) use ($imageFileNameForDelete) {
+                return $imageName !== $imageFileNameForDelete;
+            }
+        ));
+
+        $app['db']->update('art_works', $work, ['slug' => $work['slug']]);
+
+        return new Response('', 204);
     }
 }

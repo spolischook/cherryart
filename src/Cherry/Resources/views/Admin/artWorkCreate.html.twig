@@ -11,7 +11,7 @@
         {{ form_row(form.title) }}
         {{ form_row(form.slug) }}
 
-        {{ form_row(form.description) }}
+        {{ form_row(form.description, { 'attr':{'id':'art-work-description'} }) }}
         {{ form_row(form.price) }}
         {{ form_row(form.in_stock) }}
         <div class="form-group">
@@ -63,5 +63,8 @@
                 newLi.appendTo(imageList);
             });
         })
+    </script>
+    <script>
+        CKEDITOR.replace( 'art_work_description' );
     </script>
 {% endblock %}

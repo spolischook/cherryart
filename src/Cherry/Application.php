@@ -94,5 +94,7 @@ class Application extends BaseApplication
         $this->match('/admin/art-works/{slug}', 'Cherry\\Controller\\AdminController::editArtWork')
             ->bind('admin_edit_work')
             ->method('GET|POST');
+        $this->delete('/admin/art-works/{slug}/images/{imageFileNameForDelete}', 'Cherry\\Controller\\AdminController::removeImage')
+            ->bind('admin_edit_work_delete_image');
     }
 }

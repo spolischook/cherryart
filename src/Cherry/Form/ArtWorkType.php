@@ -56,6 +56,8 @@ class ArtWorkType extends AbstractType
             ])
             ->add('price', MoneyType::class, [
                 'currency' => 'USD',
+                'scale'    => 0,
+                'grouping' => true,
                 'required' => false,
             ])
             ->add('in_stock', ChoiceType::class, [
@@ -110,10 +112,10 @@ class ArtWorkType extends AbstractType
 
     /**
      * @param array $requestData
-     * @param array $normData
+     * @param array|null $normData
      * @return UploadedFile|File|null
      */
-    protected function getNewPictureRequestData(array $requestData, array $normData)
+    protected function getNewPictureRequestData(array $requestData, $normData)
     {
         if ($normData['picture'] !== null && $requestData['picture'] === null) {
             return $normData['picture'];
@@ -124,10 +126,10 @@ class ArtWorkType extends AbstractType
 
     /**
      * @param array $requestData
-     * @param array $normData
+     * @param array|null $normData
      * @return array
      */
-    protected function getNewImagesRequestData(array $requestData, array $normData)
+    protected function getNewImagesRequestData(array $requestData, $normData)
     {
         if (false === array_key_exists('images', $requestData) || empty($requestData['images'])) {
             return $normData['images'];

@@ -1,5 +1,6 @@
 /vendor/
 /bower_components/
 /image_originals/
+/web/assets/
 /web/images/
 app.db

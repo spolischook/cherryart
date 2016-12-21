@@ -3,6 +3,8 @@
 {% block content %}
     <h1>{{ "Edit "~form.title.vars.value }}</h1>
 
+    <div class="flash-messages"></div>
+
     <form enctype="multipart/form-data" action="{{ path('admin_edit_work', {'slug': form.slug.vars.value}) }}" method="post">
         {{ form_start(form, {'multipart': true}) }}
 
@@ -11,7 +13,7 @@
         {{ form_row(form.title) }}
         {{ form_row(form.slug, { 'attr':{'readonly':'readonly'} }) }}
 
-        {{ form_row(form.description) }}
+        {{ form_row(form.description, { 'attr':{'id':'art_work_description', 'cols': '50'} }) }}
         {{ form_row(form.price) }}
         {{ form_row(form.in_stock) }}
         <div class="form-group">
@@ -26,8 +28,16 @@
         <ul id="image-fields-list"
             data-prototype="{{ form_widget(form.images.vars.prototype)|e }}">
             {% for image in form.images %}
+                <div class="delete-image-container">
                     <img src="{{ app.image_handler.getImageUrl(image.vars.data.fileName, 'art_work', 'admin') }}" class="img-thumbnail">
+                    <input
+                            class="delete-image-button"
+                            data-delete-link="{{ path('admin_edit_work_delete_image', {'imageFileNameForDelete': image.vars.data.fileName, 'slug': form.slug.vars.value}) }}"
+                            type="button"
+                            value=" DELETE "
+                    />
                     <div style="display: none;">{{ form_row(image) }}</div>
+                </div>
             {% endfor %}
         </ul>
 
@@ -63,5 +73,25 @@
                 newLi.appendTo(imageList);
             });
         })
+    </script>
+    <script type="text/javascript">
+        CKEDITOR.replace( 'art_work_description' );
+    </script>
+    <script>
+        $( ".delete-image-container .delete-image-button" ).click(function() {
+            var deleteLink = $(this).data('delete-link')
+                imageContainer = $(this).parent();
+            $.ajax({
+                url: deleteLink,
+                method: 'DELETE'
+            }).done(function() {
+                imageContainer.remove();
+                $('div.flash-messages').append('<div class="alert alert-success" role="alert">' +
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Image was successfully deleted</div>');
+            }).fail(function (jqXHR, textStatus) {
+                $('div.flash-messages').append('<div class="alert alert-danger" role="alert">' +
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+textStatus+'</div>');
+            });
+        });
     </script>
 {% endblock %}
