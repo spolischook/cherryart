@@ -29,7 +29,7 @@
 
 @media (min-width: 800px) {
     .container {
-        width: 800px;
+        width: 860px;
         margin-left: auto;
         margin-right: auto;
     }
@@ -59,6 +59,11 @@ ul.topnav li a {
     text-decoration: none;
     transition: 0.3s;
     font-size: 17px;
+}
+
+ul.topnav li.language-selector {
+    float: right;
+    margin-right: 10px;
 }
 
 /* Change background color of links on hover */

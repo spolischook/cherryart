@@ -56,6 +56,9 @@ class ArtWorkType extends AbstractType
             ->add('description', TextareaType::class, [
                 'required' => false,
             ])
+            ->add('materials', TextType::class, [
+                'required' => false,
+            ])
             ->add('width', IntegerType::class, [
                 'constraints' => [new Assert\Type(['type' => 'integer'])],
             ])
@@ -67,7 +70,8 @@ class ArtWorkType extends AbstractType
                     'pattern' => '/\d{4}-\d{2}-\d{2}/',
                     'message' => 'The data must be in format YYYY-MM-DD',
                 ])],
-                'data' => $today->format('Y-m-d'),
+                'empty_data' => $today->format('Y-m-d'),
+                'required' => false,
             ])
             ->add('price', MoneyType::class, [
                 'currency' => 'USD',

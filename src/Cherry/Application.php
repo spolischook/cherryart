@@ -8,6 +8,8 @@ use Intervention\Image\Constraint;
 use Intervention\Image\Image;
 use Silex\Application as BaseApplication;
 use Silex\Application\FormTrait;
+use Symfony\Component\Translation\Loader\YamlFileLoader;
+use Symfony\Component\Translation\Translator;
 
 class Application extends BaseApplication
 {
@@ -29,8 +31,17 @@ class Application extends BaseApplication
         $this->register(new \Silex\Provider\ValidatorServiceProvider());
         $this->register(new \Silex\Provider\LocaleServiceProvider());
         $this->register(new \Silex\Provider\TranslationServiceProvider(), [
+            'locale_fallbacks' => ['uk', 'en'],
             'translator.domains' => [],
         ]);
+        $this->extend('translator', function(Translator $translator, $app) {
+            $translator->addLoader('yaml', new YamlFileLoader());
+
+            $translator->addResource('yaml', __DIR__.'/Resources/translations/en.yml', 'en');
+            $translator->addResource('yaml', __DIR__.'/Resources/translations/uk.yml', 'uk');
+
+            return $translator;
+        });
 
         $this->register(new \Silex\Provider\DoctrineServiceProvider(), array(
             'db.options' => array(
@@ -86,10 +97,18 @@ class Application extends BaseApplication
 //            ['^/admin', 'ROLE_ADMIN', 'https'],
 //        ];
 
-        $this->get('/art-works/{slug}', 'Cherry\\Controller\\ArtWorksController::viewAction')->bind('art_work');
-        $this->get('/art-works', 'Cherry\\Controller\\ArtWorksController::listAction')->bind('art_works');
-        $this->get('/about', 'Cherry\\Controller\\MainController::aboutAction')->bind('about');
-        $this->get('/', 'Cherry\\Controller\\MainController::homepageAction')->bind('homepage');
+        $app->get('/', function () use ($app) {
+            $locales = $app['translator']->getFallbackLocales();
+            $prefLocales = array_reduce(explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']), function ($res, $el) { list($l, $q) = array_merge(explode(';q=', $el), [1]); $res[$l] = (float) $q; return $res; }, []);
+            asort($prefLocales);
+            $locale = array_reduce(array_keys($prefLocales), function ($default, $prefLocale) use ($locales) { return in_array($prefLocale, $locales) ? $prefLocale : $default; }, $app['translator']->getLocale());
+
+            return $app->redirect('/'.$locale);
+        });
+        $this->get('/{_locale}/art-works/{slug}', 'Cherry\\Controller\\ArtWorksController::viewAction')->bind('art_work');
+        $this->get('/{_locale}/art-works', 'Cherry\\Controller\\ArtWorksController::listAction')->bind('art_works');
+        $this->get('/{_locale}/about', 'Cherry\\Controller\\MainController::aboutAction')->bind('about');
+        $this->get('/{_locale}/', 'Cherry\\Controller\\MainController::homepageAction')->bind('homepage');
 
         $this->get('/login', 'Cherry\\Controller\\SecurityController::loginAction')->bind('login');
         $this->get('/admin/login_check', 'Cherry\\Controller\\SecurityController::homepageAction')->bind('admin_login_check');
