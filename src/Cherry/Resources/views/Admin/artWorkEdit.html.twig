@@ -1,12 +1,12 @@
 {% extends "Admin/adminLayout.html.twig" %}
-{% block title %}{{ "Edit "~form.title.vars.value }}{% endblock %}
+{% block title %}{{ "Edit "~form.title_en.vars.value }}{% endblock %}
 {% block css %}
     {{ parent() }}
     <link rel="stylesheet" href="/assets/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/assets/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
 {% endblock %}
 {% block content %}
-    <h1>{{ "Edit "~form.title.vars.value }}</h1>
+    <h1>{{ "Edit "~form.title_en.vars.value }}</h1>
 
     <div class="flash-messages"></div>
 
@@ -15,10 +15,25 @@
 
         {{ form_errors(form) }}
 
-        {{ form_row(form.title) }}
-        {{ form_row(form.slug, { 'attr':{'readonly':'readonly'} }) }}
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#en" aria-controls="en" role="tab" data-toggle="tab">English</a></li>
+            <li role="presentation"><a href="#uk" aria-controls="uk" role="tab" data-toggle="tab">Українська</a></li>
+        </ul>
 
-        {{ form_row(form.description, { 'attr':{'id':'art_work_description', 'cols': '50'} }) }}
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="en">
+                {{ form_row(form.title_en) }}
+                {{ form_row(form.description_en, { 'attr':{'id':'art-work-description'} }) }}
+                {{ form_row(form.materials_en) }}
+            </div>
+            <div role="tabpanel" class="tab-pane" id="uk">
+                {{ form_row(form.title_uk) }}
+                {{ form_row(form.description_uk, { 'attr':{'id':'art-work-description'} }) }}
+                {{ form_row(form.materials_uk) }}
+            </div>
+        </div>
+
+        {{ form_row(form.slug, { 'attr':{'readonly':'readonly'} }) }}
         <div class="row">
             <div class="col-lg-6">
                 <div class="input-group">
@@ -55,7 +70,6 @@
             </div>
         </div>
 
-        {{ form_row(form.materials) }}
         {{ form_row(form.price) }}
         {{ form_row(form.in_stock) }}
         <div class="form-group">
@@ -93,6 +107,7 @@
 {% endblock %}
 {% block javascript %}
     {{ parent() }}
+    <script type="text/javascript" src="/assets/ckeditor/ckeditor.js"></script>
     <script type="text/javascript" src="/assets/moment/min/moment-with-locales.min.js"></script>
     <script type="text/javascript" src="/assets/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript">
@@ -120,7 +135,8 @@
         })
     </script>
     <script type="text/javascript">
-        CKEDITOR.replace( 'art_work_description' );
+        CKEDITOR.replace( 'art_work_description_en' );
+        CKEDITOR.replace( 'art_work_description_uk' );
     </script>
     <script>
         $( ".delete-image-container .delete-image-button" ).click(function() {

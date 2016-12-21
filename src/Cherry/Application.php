@@ -105,14 +105,6 @@ class Application extends BaseApplication
 
             return $app->redirect('/'.$locale);
         });
-        $this->get('/{_locale}/art-works/{slug}', 'Cherry\\Controller\\ArtWorksController::viewAction')->bind('art_work');
-        $this->get('/{_locale}/art-works', 'Cherry\\Controller\\ArtWorksController::listAction')->bind('art_works');
-        $this->get('/{_locale}/about', 'Cherry\\Controller\\MainController::aboutAction')->bind('about');
-        $this->get('/{_locale}/', 'Cherry\\Controller\\MainController::homepageAction')->bind('homepage');
-
-        $this->get('/login', 'Cherry\\Controller\\SecurityController::loginAction')->bind('login');
-        $this->get('/admin/login_check', 'Cherry\\Controller\\SecurityController::homepageAction')->bind('admin_login_check');
-
         $this->get('/admin', 'Cherry\\Controller\\AdminController::dashboardAction')->bind('admin_dashboard');
         $this->get('/admin/art-works', 'Cherry\\Controller\\AdminController::listArtWorks')->bind('admin_art_works');
         $this->match('/admin/art-works/new', 'Cherry\\Controller\\AdminController::createArtWork')
@@ -123,5 +115,13 @@ class Application extends BaseApplication
             ->method('GET|POST');
         $this->delete('/admin/art-works/{slug}/images/{imageFileNameForDelete}', 'Cherry\\Controller\\AdminController::removeImage')
             ->bind('admin_edit_work_delete_image');
+
+        $this->get('/{_locale}/art-works/{slug}', 'Cherry\\Controller\\ArtWorksController::viewAction')->bind('art_work');
+        $this->get('/{_locale}/art-works', 'Cherry\\Controller\\ArtWorksController::listAction')->bind('art_works');
+        $this->get('/{_locale}/about', 'Cherry\\Controller\\MainController::aboutAction')->bind('about');
+        $this->get('/{_locale}/', 'Cherry\\Controller\\MainController::homepageAction')->bind('homepage');
+
+        $this->get('/login', 'Cherry\\Controller\\SecurityController::loginAction')->bind('login');
+        $this->get('/admin/login_check', 'Cherry\\Controller\\SecurityController::homepageAction')->bind('admin_login_check');
     }
 }

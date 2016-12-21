@@ -46,17 +46,26 @@ class ArtWorkType extends AbstractType
     {
         $today = new \DateTime();
         $builder
-            ->add('title', TextType::class, [
+            ->add('title_en', TextType::class, [
+                'required' => true,
+            ])
+            ->add('title_uk', TextType::class, [
                 'required' => true,
             ])
             ->add('slug', TextType::class, [
                 'required' => false,
                 'constraints' => [new Assert\NotBlank()],
             ])
-            ->add('description', TextareaType::class, [
+            ->add('description_en', TextareaType::class, [
                 'required' => false,
             ])
-            ->add('materials', TextType::class, [
+            ->add('description_uk', TextareaType::class, [
+                'required' => false,
+            ])
+            ->add('materials_en', TextType::class, [
+                'required' => false,
+            ])
+            ->add('materials_uk', TextType::class, [
                 'required' => false,
             ])
             ->add('width', IntegerType::class, [

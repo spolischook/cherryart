@@ -13,10 +13,25 @@
 
         {{ form_errors(form) }}
 
-        {{ form_row(form.title) }}
-        {{ form_row(form.slug) }}
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#en" aria-controls="en" role="tab" data-toggle="tab">English</a></li>
+            <li role="presentation"><a href="#uk" aria-controls="uk" role="tab" data-toggle="tab">Українська</a></li>
+        </ul>
 
-        {{ form_row(form.description, { 'attr':{'id':'art-work-description'} }) }}
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="en">
+                {{ form_row(form.title_en) }}
+                {{ form_row(form.description_en, { 'attr':{'id':'art-work-description'} }) }}
+                {{ form_row(form.materials_en) }}
+            </div>
+            <div role="tabpanel" class="tab-pane" id="uk">
+                {{ form_row(form.title_uk) }}
+                {{ form_row(form.description_uk, { 'attr':{'id':'art-work-description'} }) }}
+                {{ form_row(form.materials_uk) }}
+            </div>
+        </div>
+
+        {{ form_row(form.slug) }}
         <div class="row">
             <div class="col-lg-6">
                 <div class="input-group">
@@ -52,7 +67,6 @@
                 </div>
             </div>
         </div>
-        {{ form_row(form.materials) }}
         {{ form_row(form.price) }}
         {{ form_row(form.in_stock) }}
         <div class="form-group">
@@ -75,6 +89,7 @@
 {% endblock %}
 {% block javascript %}
     {{ parent() }}
+    <script type="text/javascript" src="/assets/ckeditor/ckeditor.js"></script>
     <script type="text/javascript" src="/assets/moment/min/moment-with-locales.min.js"></script>
     <script type="text/javascript" src="/assets/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript">
@@ -102,7 +117,8 @@
         })
     </script>
     <script>
-        CKEDITOR.replace( 'art_work_description' );
+        CKEDITOR.replace( 'art_work_description_en' );
+        CKEDITOR.replace( 'art_work_description_uk' );
     </script>
     <script type="text/javascript">
         $(function () {
