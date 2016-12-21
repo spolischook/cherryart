@@ -10,6 +10,7 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -43,6 +44,7 @@ class ArtWorkType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $today = new \DateTime();
         $builder
             ->add('title', TextType::class, [
                 'required' => true,
@@ -53,6 +55,19 @@ class ArtWorkType extends AbstractType
             ])
             ->add('description', TextareaType::class, [
                 'required' => false,
+            ])
+            ->add('width', IntegerType::class, [
+                'constraints' => [new Assert\Type(['type' => 'integer'])],
+            ])
+            ->add('height', IntegerType::class, [
+                'constraints' => [new Assert\Type(['type' => 'integer'])],
+            ])
+            ->add('date', TextType::class, [
+                'constraints' => [new Assert\Regex([
+                    'pattern' => '/\d{4}-\d{2}-\d{2}/',
+                    'message' => 'The data must be in format YYYY-MM-DD',
+                ])],
+                'data' => $today->format('Y-m-d'),
             ])
             ->add('price', MoneyType::class, [
                 'currency' => 'USD',

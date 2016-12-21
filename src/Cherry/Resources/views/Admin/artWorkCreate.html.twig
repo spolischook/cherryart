@@ -1,5 +1,10 @@
 {% extends "Admin/adminLayout.html.twig" %}
 {% block title %}Add new Art Work{% endblock %}
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/assets/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+{% endblock %}
 {% block content %}
     <h1>Add new Art Work</h1>
 
@@ -12,6 +17,40 @@
         {{ form_row(form.slug) }}
 
         {{ form_row(form.description, { 'attr':{'id':'art-work-description'} }) }}
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">
+                        <span class="glyphicon glyphicon-resize-horizontal" aria-hidden="true"></span> {{ form_label(form.width) }}
+                    </span>
+                    {{ form_widget(form.width) }}
+                </div>
+                {{ form_errors(form.width) }}
+            </div><!-- /.col-lg-6 -->
+            <div class="col-lg-6">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">
+                        <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span> {{ form_label(form.height) }}
+                    </span>
+                    {{ form_widget(form.height) }}
+                </div>
+                {{ form_errors(form.height) }}
+            </div><!-- /.col-lg-6 -->
+        </div>
+        <div class="row">
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    {{ form_label(form.date) }}
+                    {{ form_errors(form.date) }}
+                    <div class='input-group date' id='created-date-container'>
+                        {{ form_widget(form.date) }}
+                        <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
         {{ form_row(form.price) }}
         {{ form_row(form.in_stock) }}
         <div class="form-group">
@@ -23,12 +62,6 @@
         <label>Images</label>
         <ul id="image-fields-list"
             data-prototype="{{ form_widget(form.images.vars.prototype)|e }}">
-            {% for image in form.images %}
-                <li>
-                    {{ form_errors(image) }}
-                    {{ form_widget(image) }}
-                </li>
-            {% endfor %}
         </ul>
 
         <a href="#" class="btn btn-default  btn-sm" id="add-another-image">+ Add image</a>
@@ -40,6 +73,8 @@
 {% endblock %}
 {% block javascript %}
     {{ parent() }}
+    <script type="text/javascript" src="/assets/moment/min/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="/assets/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript">
         // keep track of how many image fields have been rendered
         var imageCount = '{{ form.images|length }}';
@@ -66,5 +101,15 @@
     </script>
     <script>
         CKEDITOR.replace( 'art_work_description' );
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $('#created-date-container').datetimepicker({
+                locale: 'ru',
+                format: "YYYY-MM-DD",
+                enabledHours: false,
+                keepOpen: false
+            });
+        });
     </script>
 {% endblock %}

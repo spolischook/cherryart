@@ -17,6 +17,7 @@
   ],
   "dependencies": {
     "bootstrap": "v3.3.7",
-    "ckeditor": "^4.6.1"
+    "ckeditor": "^4.6.1",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.43"
   }
 }

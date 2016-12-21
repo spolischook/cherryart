@@ -2,6 +2,7 @@
 
 namespace Cherry;
 
+use Cherry\Command\GenerateThumbnails;
 use Cherry\Form\ArtWorkType;
 use Intervention\Image\Constraint;
 use Intervention\Image\Image;
@@ -47,8 +48,15 @@ class Application extends BaseApplication
                     'admin' => function (Image $image) {
                         return $image->heighten(70)->crop(70, 70);
                     },
+                    'admin_preview' => function (Image $image) {
+                        return $image->heighten(150)->crop(150, 150);
+                    },
                 ]
             );
+        };
+
+        $this['thumbnail_generation_command'] = function ($app) {
+            return new GenerateThumbnails($app['image_handler']);
         };
 
         $app['art_work_type'] = function ($app) {

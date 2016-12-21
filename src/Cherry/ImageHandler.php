@@ -81,6 +81,14 @@ class ImageHandler
         }
     }
 
+    /**
+     * @return string
+     */
+    public function getOriginalPath()
+    {
+        return $this->originalPath;
+    }
+
     protected function mkOriginDir($type)
     {
         $dir = $this->originalPath.'/'.$type;

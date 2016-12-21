@@ -6,8 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="/admin.ico">
     <title>{% block title %}{% endblock %}</title>
-    <link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/admin.css" rel="stylesheet">
+    {% block css %}
+        <link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/assets/admin.css" rel="stylesheet">
+    {% endblock %}
 </head>
 
 <body>
