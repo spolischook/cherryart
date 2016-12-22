@@ -3,6 +3,7 @@
 namespace Cherry;
 
 use Cherry\Command\GenerateThumbnails;
+use Cherry\Command\ImportJomGallery;
 use Cherry\Form\ArtWorkType;
 use Intervention\Image\Constraint;
 use Intervention\Image\Image;
@@ -62,12 +63,19 @@ class Application extends BaseApplication
                     'admin_preview' => function (Image $image) {
                         return $image->heighten(150)->crop(150, 150);
                     },
+                    'front_end_two_columns' => function (Image $image) {
+                        return $image->widen(430);
+                    },
                 ]
             );
         };
 
         $this['thumbnail_generation_command'] = function ($app) {
             return new GenerateThumbnails($app['image_handler']);
+        };
+
+        $this['import_jom_gallery_command'] = function ($app) {
+            return new ImportJomGallery($app['image_handler'], $app['db']);
         };
 
         $app['art_work_type'] = function ($app) {
