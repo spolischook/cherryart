@@ -79,7 +79,7 @@ class Application extends BaseApplication
         };
 
         $app['art_work_type'] = function ($app) {
-            return new ArtWorkType($app['db'], $app['image_handler']);
+            return new ArtWorkType($app['image_handler']);
         };
         $app->extend('form.types', function ($types) use ($app) {
             $types[] = 'art_work_type';

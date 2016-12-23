@@ -1,7 +1,32 @@
 {% extends "layout.html.twig" %}
 
-{% set page_title = 'List of art works' %}
+{% set page_title = 'menu.art_works'|trans %}
 
 {% block content %}
-    <h1>{{ page_title }}</h1>
+    <div id="art-works-list">
+        <div class="grid-sizer"></div>
+        <div class="gutter-sizer"></div>
+        {% for work in works %}
+            <div class="art-work">
+                <img src="{{ app.image_handler.getImageUrl(work.picture, 'art_work', 'front_end_two_columns') }}" />
+                <div class="art-work-details">
+                    <h5>{{ attribute(work, 'title_'~global.request.get('_locale')) }}</h5>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block scripts %}
+    {{ parent() }}
+    <script>
+        var grid = document.getElementById('art-works-list');
+        imagesLoaded( grid, function() {
+            var msnry = new Masonry( grid, {
+                itemSelector: ".art-work",
+                columnWidth: '.art-work',
+                gutter: '.gutter-sizer',
+                percentPosition: true
+            });
+        });
+    </script>
 {% endblock %}

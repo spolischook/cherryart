@@ -22,7 +22,7 @@ class AdminController
     public function listArtWorks(Application $app)
     {
         return $app['twig']->render('Admin/artWorks.html.twig', [
-            'works' => $app['db']->fetchAll('SELECT * FROM `art_works`'),
+            'works' => $app['db']->fetchAll('SELECT * FROM `art_works` ORDER BY `date_unix` DESC'),
         ]);
     }
 
@@ -42,7 +42,7 @@ class AdminController
         if ($form->isValid()) {
             $data = $form->getData();
             $app['db']->update('art_works', $data, ['slug' => $data['slug']]);
-            $app['session']->getFlashBag()->add('success', sprintf('"%s" was updated', $work['title']));
+            $app['session']->getFlashBag()->add('success', sprintf('"%s" was updated', $work['title_en']));
 
             return $app->redirect($app["url_generator"]->generate("admin_art_works"));
         }

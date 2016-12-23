@@ -14,6 +14,8 @@ class ArtWorksController
 
     public function listAction(Request $request, Application $app)
     {
-        return $app['twig']->render('ArtWorks/list.html.twig');
+        return $app['twig']->render('ArtWorks/list.html.twig', [
+            'works' => $app['db']->fetchAll('SELECT * FROM `art_works` ORDER BY `date_unix` DESC LIMIT 50'),
+        ]);
     }
 }

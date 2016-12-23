@@ -3,7 +3,6 @@
 namespace Cherry\Form;
 
 use Cherry\ImageHandler;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
@@ -24,18 +23,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 class ArtWorkType extends AbstractType
 {
     /**
-     * @var Connection
-     */
-    protected $db;
-
-    /**
      * @var ImageHandler
      */
     protected $imageHandler;
 
-    public function __construct(Connection $db, ImageHandler $imageHandler)
+    public function __construct(ImageHandler $imageHandler)
     {
-        $this->db = $db;
         $this->imageHandler = $imageHandler;
     }
 

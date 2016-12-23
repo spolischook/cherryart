@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>{% if page_title is defined %} {{ page_title }} | {% endif %} Tetiana Cherevan</title>
+        <title>{% if page_title is defined %} {{ page_title }} | {% endif %} {{ 'tetiana_cherevan'|trans }}</title>
         <link href="/style.css" rel="stylesheet">
         <script src="/script.js"></script>
     </head>
@@ -15,21 +15,20 @@
                 <li><a href="{{ path('about') }}">{{ 'menu.about'|trans }}</a></li>
                 <li class="language-selector">
                     {% if 'en' == app.translator.locale %}
-                        <a href="{{ path(global.request.get('_route'), global.request.get('_route_params')|merge({'_locale': 'uk'})) }}">Українською</a>
+                        <a href="{{ path(global.request.get('_route'), global.request.get('_route_params')|merge({'_locale': 'uk'})) }}">Укр</a>
                     {% else %}
-                        <a href="{{ path(global.request.get('_route'), global.request.get('_route_params')|merge({'_locale': 'en'})) }}">English</a>
+                        <a href="{{ path(global.request.get('_route'), global.request.get('_route_params')|merge({'_locale': 'en'})) }}">Eng</a>
                     {% endif %}
                 </li>
                 <li class="icon">
                     <a href="javascript:void(0);" onclick="menuToggle()">&#9776;</a>
                 </li>
             </ul>
-            <div class="content">
-                {% block content %}{% endblock %}
-            </div>
-            <div class="sidebar">
-                {% block sidebar %}{% endblock %}
-            </div>
+            {% block content %}{% endblock %}
         </div>
+        {% block scripts %}
+            <script src="/assets/masonry/dist/masonry.pkgd.min.js"></script>
+            <script src="/assets/imagesloaded/imagesloaded.pkgd.min.js"></script>
+        {% endblock %}
     </body>
 </html>
