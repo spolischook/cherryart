@@ -10,7 +10,7 @@
             <div class="art-work">
                 <img src="{{ app.image_handler.getImageUrl(work.picture, 'art_work', 'front_end_two_columns') }}" />
                 <div class="art-work-details">
-                    <h5>{{ attribute(work, 'title_'~global.request.get('_locale')) }}</h5>
+                    <p>{{ attribute(work, 'title_'~global.request.get('_locale')) }}</p>
                 </div>
             </div>
         {% endfor %}

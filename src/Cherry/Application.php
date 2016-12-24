@@ -105,6 +105,44 @@ class Application extends BaseApplication
 //            ['^/admin', 'ROLE_ADMIN', 'https'],
 //        ];
 
+        $this->get('/login', 'Cherry\\Controller\\SecurityController::loginAction')->bind('login');
+        $this->get('/admin/login_check', 'Cherry\\Controller\\SecurityController::homepageAction')->bind('admin_login_check');
+
+        $this
+            ->get('/admin', 'Cherry\\Controller\\AdminController::dashboardAction')
+            ->bind('admin_dashboard');
+
+        $this
+            ->get('/admin/art-works', 'Cherry\\Controller\\AdminArtWorksController::listAction')
+            ->bind('admin_art_works');
+        $this
+            ->match('/admin/art-works/new', 'Cherry\\Controller\\AdminArtWorksController::createAction')
+            ->bind('admin_art_works_create')
+            ->method('GET|POST');
+        $this
+            ->match('/admin/art-works/{slug}', 'Cherry\\Controller\\AdminArtWorksController::editAction')
+            ->bind('admin_art_works_edit')
+            ->method('GET|POST');
+        $this
+            ->delete('/admin/art-works/{slug}/images/{imageFileNameForDelete}', 'Cherry\\Controller\\AdminArtWorksController::removeImageAction')
+            ->bind('admin_art_works_remove_image');
+
+        $this
+            ->get('/admin/news', 'Cherry\\Controller\\AdminNewsController::listAction')
+            ->bind('admin_news');
+        $this
+            ->match('/admin/news/new', 'Cherry\\Controller\\AdminNewsController::createAction')
+            ->bind('admin_news_create')
+            ->method('GET|POST');
+        $this
+            ->match('/admin/news/{slug}', 'Cherry\\Controller\\AdminNewsController::editAction')
+            ->bind('admin_news_edit')
+            ->method('GET|POST');
+        $this
+            ->delete('/admin/news/{slug}/images/{imageFileNameForDelete}', 'Cherry\\Controller\\AdminNewsController::removeImageAction')
+            ->bind('admin_news_remove_image');
+
+
         $app->get('/', function () use ($app) {
             $locales = $app['translator']->getFallbackLocales();
             $prefLocales = array_reduce(explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']), function ($res, $el) { list($l, $q) = array_merge(explode(';q=', $el), [1]); $res[$l] = (float) $q; return $res; }, []);
@@ -113,23 +151,23 @@ class Application extends BaseApplication
 
             return $app->redirect('/'.$locale);
         });
-        $this->get('/admin', 'Cherry\\Controller\\AdminController::dashboardAction')->bind('admin_dashboard');
-        $this->get('/admin/art-works', 'Cherry\\Controller\\AdminController::listArtWorks')->bind('admin_art_works');
-        $this->match('/admin/art-works/new', 'Cherry\\Controller\\AdminController::createArtWork')
-            ->bind('admin_create_work')
-            ->method('GET|POST');
-        $this->match('/admin/art-works/{slug}', 'Cherry\\Controller\\AdminController::editArtWork')
-            ->bind('admin_edit_work')
-            ->method('GET|POST');
-        $this->delete('/admin/art-works/{slug}/images/{imageFileNameForDelete}', 'Cherry\\Controller\\AdminController::removeImage')
-            ->bind('admin_edit_work_delete_image');
 
-        $this->get('/{_locale}/art-works/{slug}', 'Cherry\\Controller\\ArtWorksController::viewAction')->bind('art_work');
-        $this->get('/{_locale}/art-works', 'Cherry\\Controller\\ArtWorksController::listAction')->bind('art_works');
-        $this->get('/{_locale}/about', 'Cherry\\Controller\\MainController::aboutAction')->bind('about');
-        $this->get('/{_locale}/', 'Cherry\\Controller\\MainController::homepageAction')->bind('homepage');
-
-        $this->get('/login', 'Cherry\\Controller\\SecurityController::loginAction')->bind('login');
-        $this->get('/admin/login_check', 'Cherry\\Controller\\SecurityController::homepageAction')->bind('admin_login_check');
+        $localeRouteRequirments = sprintf('^(%s)$', implode('|', $app['locale_fallbacks']));
+        $this
+            ->get('/{_locale}/art-works/{slug}', 'Cherry\\Controller\\ArtWorksController::viewAction')
+            ->bind('art_work')
+            ->assert('_locale', $localeRouteRequirments);
+        $this
+            ->get('/{_locale}/art-works', 'Cherry\\Controller\\ArtWorksController::listAction')
+            ->bind('art_works')
+            ->assert('_locale', $localeRouteRequirments);
+        $this
+            ->get('/{_locale}/about', 'Cherry\\Controller\\MainController::aboutAction')
+            ->bind('about')
+            ->assert('_locale', $localeRouteRequirments);
+        $this
+            ->get('/{_locale}/', 'Cherry\\Controller\\MainController::homepageAction')
+            ->bind('homepage')
+            ->assert('_locale', $localeRouteRequirments);
     }
 }

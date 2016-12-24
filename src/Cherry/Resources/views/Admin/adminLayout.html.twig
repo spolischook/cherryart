@@ -24,7 +24,8 @@
                 <a href="{{ path('admin_dashboard') }}" class="navbar-brand">Dashboard</a></div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ path('admin_art_works') }}">Art Works</a></li>
+                    <li{% if global.request.get('_route') == 'admin_art_works' %} class="active"{% endif %}><a href="{{ path('admin_art_works') }}">Art Works</a></li>
+                    <li{% if global.request.get('_route') == 'admin_news' %} class="active"{% endif %}><a href="{{ path('admin_news') }}">News</a></li>
                 </ul>
             </div>
         </div>

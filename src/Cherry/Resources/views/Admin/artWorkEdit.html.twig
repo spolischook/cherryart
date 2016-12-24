@@ -10,7 +10,7 @@
 
     <div class="flash-messages"></div>
 
-    <form enctype="multipart/form-data" action="{{ path('admin_edit_work', {'slug': form.slug.vars.value}) }}" method="post">
+    <form enctype="multipart/form-data" action="{{ path('admin_art_works_edit', {'slug': form.slug.vars.value}) }}" method="post">
         {{ form_start(form, {'multipart': true}) }}
 
         {{ form_errors(form) }}
@@ -87,7 +87,7 @@
                         <img src="{{ app.image_handler.getImageUrl(image.vars.data.fileName, 'art_work', 'admin_preview') }}" class="img-thumbnail">
                         <input
                                 class="delete-image-button"
-                                data-delete-link="{{ path('admin_edit_work_delete_image', {'imageFileNameForDelete': image.vars.data.fileName, 'slug': form.slug.vars.value}) }}"
+                                data-delete-link="{{ path('admin_art_works_remove_image', {'imageFileNameForDelete': image.vars.data.fileName, 'slug': form.slug.vars.value}) }}"
                                 type="button"
                                 value=" DELETE "
                         />

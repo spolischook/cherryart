@@ -8,7 +8,7 @@
 {% block content %}
     <h1>Add new Art Work</h1>
 
-    <form enctype="multipart/form-data" action="{{ path('admin_create_work') }}" method="post">
+    <form enctype="multipart/form-data" action="{{ path('admin_art_works_create') }}" method="post">
         {{ form_start(form) }}
 
         {{ form_errors(form) }}

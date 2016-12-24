@@ -3,5 +3,8 @@
 {% block content %}
     <h1>Dashboard</h1>
 
-    <a href="{{ path('admin_art_works') }}">List of Art Works</a>
+    <ul>
+        <li><a href="{{ path('admin_art_works') }}">List of Art Works</a></li>
+        <li><a href="{{ path('admin_news') }}">List of News</a></li>
+    </ul>
 {% endblock %}
