@@ -144,10 +144,18 @@ class Application extends BaseApplication
 
 
         $app->get('/', function () use ($app) {
+            if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+                return $app->redirect('/'.$app['translator']->getLocale());
+            }
+
             $locales = $app['translator']->getFallbackLocales();
             $prefLocales = array_reduce(explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']), function ($res, $el) { list($l, $q) = array_merge(explode(';q=', $el), [1]); $res[$l] = (float) $q; return $res; }, []);
             asort($prefLocales);
-            $locale = array_reduce(array_keys($prefLocales), function ($default, $prefLocale) use ($locales) { return in_array($prefLocale, $locales) ? $prefLocale : $default; }, $app['translator']->getLocale());
+            $locale = array_reduce(
+                array_keys($prefLocales), function ($default, $prefLocale) use ($locales) {
+                    return in_array($prefLocale, $locales) ? $prefLocale : $default;
+                }, $app['translator']->getLocale()
+            );
 
             return $app->redirect('/'.$locale);
         });
