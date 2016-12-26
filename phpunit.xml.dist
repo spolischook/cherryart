@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="./vendor/autoload.php"
+<phpunit bootstrap="./src/Cherry/Tests/bootstrap.php"
          backupGlobals="false"
          backupStaticAttributes="false"
-
          colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
@@ -12,7 +11,9 @@
          syntaxCheck="false"
 >
     <php>
-        <const name="http_host" value="cherryart.local"/>
+        <const name="WEB_SERVER_HOST" value="localhost" />
+        <const name="WEB_SERVER_PORT" value="8000" />
+        <const name="WEB_SERVER_DOCROOT" value="./web" />
     </php>
     <testsuites>
         <testsuite name="CherryApp Test Suite">

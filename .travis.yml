@@ -1,0 +1,14 @@
+language: php
+php: ['7.0']
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+before_script:
+  - printf "\n" | pecl install imagick
+  - composer install
+  - php -S localhost:8000 -t web/ &
+  - sed -i -e 's/cherryart.local/localhost:8000/g' phpunit.xml.dist
+script: bin/phpunit
