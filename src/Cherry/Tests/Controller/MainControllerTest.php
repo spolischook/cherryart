@@ -6,9 +6,9 @@ use Cherry\Tests\WebTestCase;
 
 class MainControllerTest extends WebTestCase
 {
-    public function testHomeAction()
+    public function testRedirectToDefaultLocale()
     {
-        $client = $this->createClient(['HTTP_HOST' => 'cherryart.local', 'HTTP_ACCEPT_LANGUAGE' => 'ru,en-US;q=0.8,en;q=0.6,uk;q=0.4']);
+        $client = $this->createClient();
         $client->request('GET', '/');
 
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
@@ -17,11 +17,24 @@ class MainControllerTest extends WebTestCase
 
     public function testHomeActionAfterRedirect()
     {
-        $client = $this->createClient(['HTTP_HOST' => 'cherryart.local', 'HTTP_ACCEPT_LANGUAGE' => 'ru,en-US;q=0.8,en;q=0.6,uk;q=0.4']);
+        $client = $this->createClient();
         $client->followRedirects();
         $crawler = $client->request('GET', '/');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertCount(1, $crawler->filter('h1:contains("Homepage")'));
+    }
+
+    public function testAboutMeAction()
+    {
+        $client = $this->createClient();
+
+        $crawler = $client->request('GET', '/en/Tetiana-Cherevan');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertCount(1, $crawler->filter('h1:contains("Tetiana Cherevan")'));
+
+        $crawler = $client->request('GET', '/uk/Tetiana-Cherevan');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertCount(1, $crawler->filter('h1:contains("Тетяна Черевань")'));
     }
 }

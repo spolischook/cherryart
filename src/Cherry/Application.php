@@ -2,6 +2,7 @@
 
 namespace Cherry;
 
+use Cherry\Command\AddUnixTime;
 use Cherry\Command\GenerateThumbnails;
 use Cherry\Command\ImportJomGallery;
 use Cherry\Form\ArtWorkType;
@@ -170,7 +171,7 @@ class Application extends BaseApplication
             ->bind('art_works')
             ->assert('_locale', $localeRouteRequirments);
         $this
-            ->get('/{_locale}/about', 'Cherry\\Controller\\MainController::aboutAction')
+            ->get('/{_locale}/Tetiana-Cherevan', 'Cherry\\Controller\\MainController::aboutMeAction')
             ->bind('about')
             ->assert('_locale', $localeRouteRequirments);
         $this

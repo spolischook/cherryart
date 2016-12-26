@@ -2,6 +2,7 @@
 <phpunit bootstrap="./vendor/autoload.php"
          backupGlobals="false"
          backupStaticAttributes="false"
+
          colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
@@ -10,6 +11,9 @@
          stopOnFailure="false"
          syntaxCheck="false"
 >
+    <php>
+        <const name="http_host" value="cherryart.local"/>
+    </php>
     <testsuites>
         <testsuite name="CherryApp Test Suite">
             <directory>./src/Cherry/Tests/</directory>

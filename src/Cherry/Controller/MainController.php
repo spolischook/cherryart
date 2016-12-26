@@ -6,7 +6,7 @@ use Cherry\Application;
 
 class MainController
 {
-    public function aboutAction(Application $app)
+    public function aboutMeAction(Application $app)
     {
         return $app['twig']->render('Main/about.html.twig');
     }
