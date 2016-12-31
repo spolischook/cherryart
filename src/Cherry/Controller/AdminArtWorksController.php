@@ -3,6 +3,7 @@
 namespace Cherry\Controller;
 
 use Cherry\Application;
+use Cherry\ImageHandler;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +13,7 @@ class AdminArtWorksController
 {
     public function listAction(Application $app)
     {
-        return $app['twig']->render('Admin/artWorks.html.twig', [
+        return $app['twig']->render('Admin/ArtWorks/list.html.twig', [
             'works' => $app['db']->fetchAll('SELECT * FROM `art_works` ORDER BY `date_unix` DESC'),
         ]);
     }
@@ -38,7 +39,7 @@ class AdminArtWorksController
             return $app->redirect($app["url_generator"]->generate("admin_art_works"));
         }
 
-        return $app['twig']->render('Admin/artWorkEdit.html.twig', [
+        return $app['twig']->render('Admin/ArtWorks/edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -57,7 +58,7 @@ class AdminArtWorksController
             return $app->redirect($app["url_generator"]->generate("admin_art_works"));
         }
 
-        return $app['twig']->render('Admin/artWorkCreate.html.twig', [
+        return $app['twig']->render('Admin/ArtWorks/create.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -82,6 +83,6 @@ class AdminArtWorksController
 
         $app['db']->update('art_works', $work, ['slug' => $work['slug']]);
 
-        return new Response('', 204);
+        return new Response(null, 204);
     }
 }

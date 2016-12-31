@@ -2,22 +2,22 @@
 
 namespace Cherry\Form;
 
+use Cherry\EventListener\AddImageCollectionListener;
+use Cherry\EventListener\AddImageListener;
+use Cherry\EventListener\UpdateUnixTimeListener;
+use Cherry\Form\DataTransformer\ImageCollectionTransformer;
+use Cherry\Form\DataTransformer\ImageTransformer;
 use Cherry\ImageHandler;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class ArtWorkType extends AbstractType
@@ -41,9 +41,11 @@ class ArtWorkType extends AbstractType
         $builder
             ->add('title_en', TextType::class, [
                 'required' => true,
+                'constraints' => [new Assert\NotBlank()],
             ])
             ->add('title_uk', TextType::class, [
                 'required' => true,
+                'constraints' => [new Assert\NotBlank()],
             ])
             ->add('slug', TextType::class, [
                 'required' => false,
@@ -75,6 +77,7 @@ class ArtWorkType extends AbstractType
                 'empty_data' => $today->format('Y-m-d'),
                 'required' => false,
             ])
+            ->add('date_unix', HiddenType::class)
             ->add('price', MoneyType::class, [
                 'currency' => 'USD',
                 'scale'    => 0,
@@ -83,8 +86,8 @@ class ArtWorkType extends AbstractType
             ])
             ->add('in_stock', ChoiceType::class, [
                 'choices'  => [
-                    'Available' => true,
-                    'Sold' => false,
+                    'Available' => 1,
+                    'Sold' => 0,
                 ],
                 'expanded' => true,
                 'required' => true,
@@ -101,150 +104,10 @@ class ArtWorkType extends AbstractType
             ])
         ;
 
-        $builder->addModelTransformer(new CallbackTransformer(
-            function ($data) {
-                if (null === $data) {
-                    return null;
-                }
-
-                $data['picture'] = $this->transformPicture($data);
-                $data['images']  = $this->transformImages($data);
-
-                return $data;
-            },
-            function (array $data) {
-                $data['picture'] = $this->reverceTransformPicture($data);
-                $data['images']  = $this->reverceTransformImages($data);
-
-                return $data;
-            }
-        ));
-
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
-            $requestData  = $event->getData();
-            $normData = $event->getForm()->getNormData();
-
-            $requestData['picture'] = $this->getNewPictureRequestData($requestData, $normData);
-            $requestData['images']  = $this->getNewImagesRequestData($requestData, $normData);
-
-            $event->setData($requestData);
-        });
-    }
-
-    /**
-     * @param array $requestData
-     * @param array|null $normData
-     * @return UploadedFile|File|null
-     */
-    protected function getNewPictureRequestData(array $requestData, $normData)
-    {
-        if ($normData['picture'] !== null && $requestData['picture'] === null) {
-            return $normData['picture'];
-        }
-
-        return $requestData['picture'];
-    }
-
-    /**
-     * @param array $requestData
-     * @param array|null $normData
-     * @return array
-     */
-    protected function getNewImagesRequestData(array $requestData, $normData)
-    {
-        if (false === array_key_exists('images', $requestData) || empty($requestData['images'])) {
-            return $normData['images'];
-        }
-
-        if (empty($normData['images'])) {
-            return $requestData['images'];
-        }
-
-        return array_merge($normData['images'], $requestData['images']);
-    }
-
-    /**
-     * @param array $data
-     * @return File|null
-     */
-    protected function transformPicture(array $data)
-    {
-        if (!$data['picture']) {
-            return null;
-        }
-
-        return new File($this->imageHandler->getOriginal($data['picture'], ImageHandler::TYPE_ART_WORK));
-    }
-
-    /**
-     * @param array $data
-     * @return array
-     */
-    protected function transformImages(array $data)
-    {
-        if (!$data['images']) {
-            return [];
-        }
-
-        return array_map(function ($filename) {
-            return new File($this->imageHandler->getOriginal($filename, ImageHandler::TYPE_ART_WORK));
-        }, explode(',', $data['images']));
-    }
-
-    /**
-     * @param array $data
-     * @return string|null
-     */
-    protected function reverceTransformPicture(array $data)
-    {
-        if (!$data['picture']) {
-            return null;
-        }
-
-        if (UploadedFile::class === get_class($data['picture'])) {
-            return $this->imageHandler->upload(
-                $data['picture'],
-                ImageHandler::TYPE_ART_WORK,
-                $data['slug']
-            );
-        }
-
-        if (File::class === get_class($data['picture'])) {
-            return $data['picture']->getFilename();
-        }
-
-        throw new UnexpectedTypeException($data['picture'], 'null|UploadedFile|File');
-    }
-
-    /**
-     * @param array $data
-     * @return null|string
-     */
-    protected function reverceTransformImages(array $data)
-    {
-        if (!$data['images']) {
-            return null;
-        }
-
-        return implode(',', array_filter(array_map(function ($file) use ($data) {
-            if (null === $file) {
-                return null;
-            }
-
-            if (UploadedFile::class === get_class($file)) {
-                return $this->imageHandler->upload(
-                    $file,
-                    ImageHandler::TYPE_ART_WORK,
-                    uniqid($data['slug'].'_')
-                );
-            }
-
-            if (File::class === get_class($file)) {
-                return $file->getFilename();
-            }
-
-            throw new UnexpectedTypeException($file, 'null|UploadedFile|File');
-
-        }, $data['images'])));
+        $builder->addModelTransformer(new ImageTransformer($this->imageHandler));
+        $builder->addModelTransformer(new ImageCollectionTransformer($this->imageHandler));
+        $builder->addEventSubscriber(new AddImageListener());
+        $builder->addEventSubscriber(new AddImageCollectionListener());
+        $builder->addEventSubscriber(new UpdateUnixTimeListener());
     }
 }

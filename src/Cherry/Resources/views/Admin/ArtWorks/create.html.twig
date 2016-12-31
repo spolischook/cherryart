@@ -10,7 +10,6 @@
 
     <form enctype="multipart/form-data" action="{{ path('admin_art_works_create') }}" method="post">
         {{ form_start(form) }}
-
         {{ form_errors(form) }}
 
         <ul class="nav nav-tabs" role="tablist">
@@ -21,12 +20,12 @@
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="en">
                 {{ form_row(form.title_en) }}
-                {{ form_row(form.description_en, { 'attr':{'id':'art-work-description'} }) }}
+                {{ form_row(form.description_en) }}
                 {{ form_row(form.materials_en) }}
             </div>
             <div role="tabpanel" class="tab-pane" id="uk">
                 {{ form_row(form.title_uk) }}
-                {{ form_row(form.description_uk, { 'attr':{'id':'art-work-description'} }) }}
+                {{ form_row(form.description_uk) }}
                 {{ form_row(form.materials_uk) }}
             </div>
         </div>
