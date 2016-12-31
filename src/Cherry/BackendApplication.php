@@ -40,9 +40,10 @@ class BackendApplication extends Application
         $this->register(new \Silex\Provider\SecurityServiceProvider(), [
             'security.firewalls' => [
                 'admin' => [
-                    'pattern' => '^/admin',
-                    'form' => ['login_path' => '/login', 'check_path' => '/admin/login_check'],
-                    'logout' => ['logout_path' => '/admin/logout', 'invalidate_session' => true],
+                    'anonymous' => true,
+                    'pattern' => '^/',
+                    'form' => ['login_path' => '/login', 'check_path' => '/login_check'],
+                    'logout' => ['logout_path' => '/logout', 'invalidate_session' => true],
                     'users' => [
                         // raw password is foo
                         'admin' => ['ROLE_ADMIN', '$2y$10$3i9/lVd8UOFIJ6PAMFt8gu3/r5g0qeCJvoSlLCsvMTythye19F77a'],
@@ -50,45 +51,48 @@ class BackendApplication extends Application
                 ],
             ],
         ]);
-//        $this['security.access_rules'] = [
-//            ['^/admin', 'ROLE_ADMIN', 'https'],
-//        ];
+        $this['security.access_rules'] = [
+            ['^/login', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+            ['^/(?!login$)', 'ROLE_ADMIN'],
+//            ['^/login', 'ROLE_ADMIN', 'https'],
+//            ['^/', 'ROLE_ADMIN', 'https'],
+        ];
 
         $this->get('/login', 'Cherry\\Controller\\SecurityController::loginAction')->bind('login');
-        $this->get('/admin/login_check', 'Cherry\\Controller\\SecurityController::homepageAction')->bind('admin_login_check');
+        $this->get('/login_check', 'Cherry\\Controller\\SecurityController::homepageAction')->bind('admin_login_check');
 
         $this
-            ->get('/admin', 'Cherry\\Controller\\AdminController::dashboardAction')
+            ->get('/', 'Cherry\\Controller\\AdminController::dashboardAction')
             ->bind('admin_dashboard');
 
         $this
-            ->get('/admin/art-works', 'Cherry\\Controller\\AdminArtWorksController::listAction')
+            ->get('/art-works', 'Cherry\\Controller\\AdminArtWorksController::listAction')
             ->bind('admin_art_works');
         $this
-            ->match('/admin/art-works/new', 'Cherry\\Controller\\AdminArtWorksController::createAction')
+            ->match('/art-works/new', 'Cherry\\Controller\\AdminArtWorksController::createAction')
             ->bind('admin_art_works_create')
             ->method('GET|POST');
         $this
-            ->match('/admin/art-works/{slug}', 'Cherry\\Controller\\AdminArtWorksController::editAction')
+            ->match('/art-works/{slug}', 'Cherry\\Controller\\AdminArtWorksController::editAction')
             ->bind('admin_art_works_edit')
             ->method('GET|POST');
         $this
-            ->delete('/admin/art-works/{slug}/images/{imageFileNameForDelete}', 'Cherry\\Controller\\AdminArtWorksController::removeImageAction')
+            ->delete('/art-works/{slug}/images/{imageFileNameForDelete}', 'Cherry\\Controller\\AdminArtWorksController::removeImageAction')
             ->bind('admin_art_works_remove_image');
 
         $this
-            ->get('/admin/news', 'Cherry\\Controller\\AdminNewsController::listAction')
+            ->get('/news', 'Cherry\\Controller\\AdminNewsController::listAction')
             ->bind('admin_news');
         $this
-            ->match('/admin/news/new', 'Cherry\\Controller\\AdminNewsController::createAction')
+            ->match('/news/new', 'Cherry\\Controller\\AdminNewsController::createAction')
             ->bind('admin_news_create')
             ->method('GET|POST');
         $this
-            ->match('/admin/news/{slug}', 'Cherry\\Controller\\AdminNewsController::editAction')
+            ->match('/news/{slug}', 'Cherry\\Controller\\AdminNewsController::editAction')
             ->bind('admin_news_edit')
             ->method('GET|POST');
         $this
-            ->delete('/admin/news/{slug}/images/{imageFileNameForDelete}', 'Cherry\\Controller\\AdminNewsController::removeImageAction')
+            ->delete('/news/{slug}/images/{imageFileNameForDelete}', 'Cherry\\Controller\\AdminNewsController::removeImageAction')
             ->bind('admin_news_remove_image');
     }
 }

@@ -27,6 +27,9 @@
                     <li{% if global.request.get('_route') == 'admin_art_works' %} class="active"{% endif %}><a href="{{ path('admin_art_works') }}">Art Works</a></li>
                     <li{% if global.request.get('_route') == 'admin_news' %} class="active"{% endif %}><a href="{{ path('admin_news') }}">News</a></li>
                 </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Frontend</a></li>
+                </ul>
             </div>
         </div>
     </nav>
