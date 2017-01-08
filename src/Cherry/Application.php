@@ -2,6 +2,7 @@
 
 namespace Cherry;
 
+use Cherry\Repository\NewsRepository;
 use Intervention\Image\Image;
 use Silex\Application as BaseApplication;
 use Silex\Application\FormTrait;
@@ -45,6 +46,9 @@ class Application extends BaseApplication
                 'path'     => realpath(__DIR__.'/../../app.db'),
             ),
         ));
+        $this['repository_news'] = function ($app) {
+            return new NewsRepository($app['db']);
+        };
 
         $this['image_handler'] = function () {
             return new ImageHandler(

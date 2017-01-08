@@ -5,6 +5,7 @@ namespace Cherry;
 use Cherry\Command\GenerateThumbnails;
 use Cherry\Command\ImportJomGallery;
 use Cherry\Form\ArtWorkType;
+use Cherry\Form\NewsExhibitionType;
 
 class BackendApplication extends Application
 {
@@ -30,8 +31,12 @@ class BackendApplication extends Application
         $app['art_work_type'] = function ($app) {
             return new ArtWorkType($app['image_handler']);
         };
+        $app['news_exhibition_type'] = function ($app) {
+            return new NewsExhibitionType($app['image_handler'], $app['repository_news']);
+        };
         $app->extend('form.types', function ($types) use ($app) {
             $types[] = 'art_work_type';
+            $types[] = 'news_exhibition_type';
 
             return $types;
         });
@@ -73,6 +78,9 @@ class BackendApplication extends Application
             ->bind('admin_art_works_create')
             ->method('GET|POST');
         $this
+            ->get('art-works/search', 'Cherry\\Controller\\AdminArtWorksController::searchAction')
+            ->bind('admin_art_works_search');
+        $this
             ->match('/art-works/{slug}', 'Cherry\\Controller\\AdminArtWorksController::editAction')
             ->bind('admin_art_works_edit')
             ->method('GET|POST');
@@ -86,9 +94,13 @@ class BackendApplication extends Application
         $this
             ->match('/news/new', 'Cherry\\Controller\\AdminNewsController::createAction')
             ->bind('admin_news_create')
+            ->method('GET');
+        $this
+            ->match('/news/new/{type}', 'Cherry\\Controller\\AdminNewsController::createTypedAction')
+            ->bind('admin_news_create_type')
             ->method('GET|POST');
         $this
-            ->match('/news/{slug}', 'Cherry\\Controller\\AdminNewsController::editAction')
+            ->match('/news/{id}', 'Cherry\\Controller\\AdminNewsController::editAction')
             ->bind('admin_news_edit')
             ->method('GET|POST');
         $this

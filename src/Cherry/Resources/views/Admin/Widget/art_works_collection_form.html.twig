@@ -1,0 +1,189 @@
+<div class="row">
+    <label for="art-works-search">Art works</label>
+    <div class="panel panel-default">
+        <div id="attached-art-works-container" class="panel-body">
+        </div>
+    </div>
+    <div class="input-group">
+        <span class="input-group-addon" id="basic-addon3">Search for Art Work</span>
+        <input type="text" class="form-control" id="art-works-search" aria-describedby="basic-addon3">
+    </div>
+    <br />
+    <div id="art-works-search-results"></div>
+</div>
+{{ form_row(form.art_works) }}
+
+
+<script id="art-works-search-results-template" type="text/x-handlebars-template">
+    {% raw %}
+        <div class="panel panel-default">
+            <div class="panel-heading">Search results by: "{{ searchString }}"</div>
+            <div class="panel-body">
+            <div class="row">
+                {{#each results}}
+                    <div class="col-xs-6 col-md-3">
+                        <a href="#" onclick="addToAttachedArtWorks(event, this)" data-obj="{{ stringify }}" class="thumbnail">
+                            <img src="/images/admin_preview/{{ picture }}" alt="{{ title_uk }}">
+                            <div class="caption">
+                                <h4>{{ title_uk }}</h4>
+                            </div>
+                        </a>
+                    </div>
+                {{ else }}
+                    <div class="alert alert-warning" role="alert">No results for "{{ searchString }}"</div>
+                {{/each}}
+            </div>
+            </div>
+        </div>
+    {% endraw %}
+</script>
+
+
+<script id="attached-art-works-template" type="text/x-handlebars-template">
+    {% raw %}
+        <div class="row">
+            {{#each artWorks}}
+                <div class="col-xs-6 col-md-3">
+                    <div class="thumbnail image-container">
+                        <img src="/images/admin_preview/{{ picture }}" alt="{{ title_uk }}">
+                        <div class="caption">
+                            <h4>{{ title_uk }}</h4>
+                        </div>
+                        <input
+                                class="hover-delete-button btn btn-danger"
+                                onclick="removeArtWork(this)"
+                                data-obj="{{ stringify }}"
+                                type="button"
+                                value=" DELETE "
+                        />
+                    </div>
+                </div>
+            {{ else }}
+                <div class="alert alert-warning" role="alert">No attached art works</div>
+            {{/each}}
+        </div>
+    {% endraw %}
+</script>
+
+<script>
+    Handlebars.registerHelper('stringify', function() {
+        return JSON.stringify(this);
+    });
+</script>
+
+<script>
+    var attachedArtWorkssource,
+        attachedArtWorksTemplate,
+        attachedArtWorksContainer,
+        artWorksFormInput;
+
+    document.addEventListener("DOMContentLoaded", initVariables);
+    document.addEventListener("DOMContentLoaded", showAttachedArtworks);
+
+    function initVariables() {
+        attachedArtWorkssource   = $("#attached-art-works-template").html();
+        attachedArtWorksTemplate = Handlebars.compile(attachedArtWorkssource);
+        attachedArtWorksContainer = $('#attached-art-works-container');
+        artWorksFormInput = $('#news_exhibition_art_works');
+    }
+
+    function showAttachedArtworks() {
+        attachedArtWorksContainer.empty().append(attachedArtWorksTemplate({'artWorks': getFormArtWorks()}));
+    }
+
+    function addToAttachedArtWorks(e, element) {
+        e.preventDefault();
+        var newArtWork = JSON.parse(element.getAttribute('data-obj'));
+        element.parentElement.remove();
+        console.log('Add work with id = '+newArtWork.id);
+
+        addArtWorkToForm(newArtWork);
+        showAttachedArtworks();
+    }
+
+    function getFormArtWorks() {
+        return JSON.parse(artWorksFormInput.val());
+    }
+
+    function addArtWorkToForm(newArtWork) {
+        var existingArtWorks = getFormArtWorks();
+        existingArtWorks.push(newArtWork);
+
+        artWorksFormInput.val(JSON.stringify(existingArtWorks));
+    }
+
+    function removeArtWork(element) {
+        var
+            artWork = JSON.parse(element.getAttribute('data-obj')),
+            existingArtWorks = getFormArtWorks()
+        ;
+
+        existingArtWorks = existingArtWorks.filter(function (item) {
+            return item.id != artWork.id;
+        });
+
+        artWorksFormInput.val(JSON.stringify(existingArtWorks));
+        showAttachedArtworks();
+        searchArtWorks();
+    }
+</script>
+
+
+<script>
+    var artWorkSearchSource   = $("#art-works-search-results-template").html(),
+        artWorkSearchTemplate = Handlebars.compile(artWorkSearchSource),
+        searchResultContainer = $('#art-works-search-results'),
+        searchLink = '{{ path('admin_art_works_search') }}',
+        delay = (function(){
+            var timer = 0;
+            return function(callback, ms) {
+                clearTimeout (timer);
+                timer = setTimeout(callback, ms);
+            };
+        })()
+    ;
+    $('#art-works-search').keyup(function () {
+        delay(searchArtWorks, 1000 );
+        $('html,body').animate({ scrollTop: searchResultContainer.offset().top}, 'slow');
+    });
+
+    function searchArtWorks() {
+        if ('' == getSearchString()) {
+            searchResultContainer.empty();
+            return;
+        }
+        $.ajax({
+            url: searchLink+'?title='+getSearchString(),
+            method: 'GET'
+        }).done(function(data, textStatus, jqXHR) {
+            if (!jqXHR || !jqXHR.status || jqXHR.status != 200) {
+                searchResultContainer.append('oops');
+            } else {
+                searchResultContainer.empty().append(artWorkSearchTemplate({'results': removeExistingItems(data), 'searchString': getSearchString()}));
+            }
+        }).fail(function () {
+            searchResultContainer.append('oops');
+        });
+    }
+
+    function removeExistingItems(items) {
+        return items.filter(isNotAttached);
+    }
+
+    function getSearchString() {
+        return $('#art-works-search').val();
+    }
+
+    function isNotAttached(item) {
+        var existingItems = getFormArtWorks(),
+            len = existingItems.length;
+
+        for (i=0; i<len; ++i) {
+            if (existingItems[i]['id'] == item['id']) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+</script>

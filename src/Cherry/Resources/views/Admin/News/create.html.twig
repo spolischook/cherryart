@@ -1,0 +1,11 @@
+{% extends "Admin/adminLayout.html.twig" %}
+{% block title %}News{% endblock %}
+{% block content %}
+    <h1>Create new News</h1>
+    <div class="list-group">
+        <a href="{{ path('admin_news_create_type', {type: 'exhibition'}) }}" type="button" class="list-group-item">Exhibition</a>
+        <a href="{{ path('admin_news_create_type', {type: 'blog-post'}) }}" type="button" class="list-group-item disabled">Blog post</a>
+        <a href="{{ path('admin_news_create_type', {type: 'newspaper'}) }}" type="button" class="list-group-item disabled">Newspaper</a>
+        <a href="{{ path('admin_news_create_type', {type: 'video'}) }}" type="button" class="list-group-item disabled">Video news</a>
+    </div>
+{% endblock %}

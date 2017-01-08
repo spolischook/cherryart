@@ -6,7 +6,7 @@ require __DIR__.'/../vendor/autoload.php';
 use Symfony\Component\Console\Application;
 
 $consoleApp = new Application();
-$webApp = new Cherry\Application();
+$webApp = new Cherry\BackendApplication();
 
 $consoleApp->add($webApp['thumbnail_generation_command']);
 $consoleApp->add($webApp['import_jom_gallery_command']);

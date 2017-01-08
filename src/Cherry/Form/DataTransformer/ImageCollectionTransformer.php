@@ -15,9 +15,15 @@ class ImageCollectionTransformer implements DataTransformerInterface
      */
     protected $imageHandler;
 
-    public function __construct(ImageHandler $imageHandler)
+    /**
+     * @var string
+     */
+    protected $imageType;
+
+    public function __construct(ImageHandler $imageHandler, $imageType)
     {
         $this->imageHandler = $imageHandler;
+        $this->imageType    = $imageType;
     }
 
     /**
@@ -55,7 +61,7 @@ class ImageCollectionTransformer implements DataTransformerInterface
         }
 
         return array_map(function ($filename) {
-            return new File($this->imageHandler->getOriginal($filename, ImageHandler::TYPE_ART_WORK));
+            return new File($filename, false);
         }, explode(',', $data['images']));
     }
 
@@ -77,13 +83,13 @@ class ImageCollectionTransformer implements DataTransformerInterface
             if (UploadedFile::class === get_class($file)) {
                 return $this->imageHandler->upload(
                     $file,
-                    ImageHandler::TYPE_ART_WORK,
+                    $this->imageType,
                     uniqid($data['slug'].'_')
                 );
             }
 
             if (File::class === get_class($file)) {
-                return $file->getFilename();
+                return $file->getPathName();
             }
 
             throw new UnexpectedTypeException($file, 'null|UploadedFile|File');

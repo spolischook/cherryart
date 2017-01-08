@@ -5,6 +5,7 @@ namespace Cherry\Controller;
 use Cherry\Application;
 use Cherry\ImageHandler;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -84,5 +85,23 @@ class AdminArtWorksController
         $app['db']->update('art_works', $work, ['slug' => $work['slug']]);
 
         return new Response(null, 204);
+    }
+
+    public function searchAction(Application $app, Request $request)
+    {
+        $searchTitle = $request->get('title');
+        $utf8Ucfirst = function ($str) {
+            $fc = mb_strtoupper(mb_substr($str, 0, 1));
+            return $fc.mb_substr($str, 1);
+        };
+
+        return new JsonResponse($app['db']->fetchAll(
+            sprintf(
+                "SELECT * FROM art_works WHERE title_en LIKE '%%%s%%' OR title_en LIKE '%%%s%%' OR title_uk LIKE '%%%s%%'  OR title_uk LIKE '%%%s%%'",
+                mb_strtolower($searchTitle),
+                $utf8Ucfirst(mb_strtolower($searchTitle)),
+                mb_strtolower($searchTitle),
+                $utf8Ucfirst(mb_strtolower($searchTitle)))
+        ));
     }
 }

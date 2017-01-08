@@ -7,12 +7,9 @@
 {% endblock %}
 {% block content %}
     <h1>{{ "Edit "~form.title_en.vars.value }}</h1>
-
     <div class="flash-messages"></div>
-
-    <form enctype="multipart/form-data" action="{{ path('admin_art_works_edit', {'slug': form.slug.vars.value}) }}" method="post">
-        {{ form_start(form, {'multipart': true}) }}
-
+    <form enctype="multipart/form-data" action="{{ path('admin_news_edit', {'id': form.vars.value.id}) }}" method="post">
+        {{ form_start(form) }}
         {{ form_errors(form) }}
 
         <ul class="nav nav-tabs" role="tablist">
@@ -23,38 +20,14 @@
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="en">
                 {{ form_row(form.title_en) }}
-                {{ form_row(form.description_en) }}
-                {{ form_row(form.materials_en) }}
+                {{ form_row(form.text_en) }}
             </div>
             <div role="tabpanel" class="tab-pane" id="uk">
                 {{ form_row(form.title_uk) }}
-                {{ form_row(form.description_uk) }}
-                {{ form_row(form.materials_uk) }}
+                {{ form_row(form.text_uk) }}
             </div>
         </div>
-
-        {{ form_row(form.slug, { 'attr':{'readonly':'readonly'} }) }}
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon1">
-                        <span class="glyphicon glyphicon-resize-horizontal" aria-hidden="true"></span> {{ form_label(form.width) }}
-                    </span>
-                    {{ form_widget(form.width) }}
-                </div>
-                {{ form_errors(form.width) }}
-            </div><!-- /.col-lg-6 -->
-            <div class="col-lg-6">
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon1">
-                        <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span> {{ form_label(form.height) }}
-                    </span>
-                    {{ form_widget(form.height) }}
-                </div>
-                {{ form_errors(form.height) }}
-            </div><!-- /.col-lg-6 -->
-        </div>
-        <br />
+        {{ form_row(form.slug) }}
         <div class="row">
             <div class='col-sm-6'>
                 <div class="form-group">
@@ -69,9 +42,6 @@
                 </div>
             </div>
         </div>
-
-        {{ form_row(form.price) }}
-        {{ form_row(form.in_stock) }}
         <div class="form-group">
             {{ form_label(form.picture) }}<br />
             <img src="{{ app.image_handler.getImageUrl(form.picture.vars.data.pathName, 'admin_preview') }}" class="img-thumbnail">
@@ -86,7 +56,7 @@
                     <img src="{{ app.image_handler.getImageUrl(image.pathName, 'admin_preview') }}" class="img-thumbnail">
                     <input
                             class="delete-image-button hover-delete-button"
-                            data-delete-link="{{ path('admin_art_works_remove_image', {'imageFileNameForDelete': image.fileName, 'slug': form.slug.vars.value}) }}"
+                            data-delete-link="{{ path('admin_news_remove_image', {'imageFileNameForDelete': image.fileName, 'slug': form.slug.vars.value}) }}"
                             type="button"
                             value=" DELETE "
                     />
@@ -95,6 +65,7 @@
         </div>
         {{ form_widget(form.images) }}
         <br />
+        {% include 'Admin/Widget/art_works_collection_form.html.twig' with {'form': form} %}
         <br />
         <input type="submit" class="btn btn-success" name="submit" value="Save Art Work" />
         {{ form_end(form) }}
@@ -106,9 +77,9 @@
     <script type="text/javascript" src="/assets/moment/min/moment-with-locales.min.js"></script>
     <script type="text/javascript" src="/assets/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript" src="/remove-image.js"></script>
-    <script type="text/javascript">
-        CKEDITOR.replace( 'art_work_description_en' );
-        CKEDITOR.replace( 'art_work_description_uk' );
+    <script>
+        CKEDITOR.replace( 'news_exhibition_text_en' );
+        CKEDITOR.replace( 'news_exhibition_text_uk' );
     </script>
     <script type="text/javascript">
         $(function () {

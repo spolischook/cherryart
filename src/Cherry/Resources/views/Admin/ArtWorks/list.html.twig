@@ -21,7 +21,7 @@
                 {% for work in works %}
                     <tr>
                         <th scope="row">{{ loop.index }}</th>
-                        <td><img src="{{ app.image_handler.getImageUrl(work.picture, 'art_work', 'admin') }} " class="img-thumbnail"></td>
+                        <td><img src="{{ app.image_handler.getImageUrl(work.picture, 'admin') }} " class="img-thumbnail"></td>
                         <td>{{ work.title_en }}(en)<br />{{ work.title_uk }}(uk)</td>
                         <td>{{ work.price }}</td>
                         <td>

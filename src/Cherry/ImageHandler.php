@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 class ImageHandler
 {
     const TYPE_ART_WORK = 'art_work';
+    const TYPE_NEWS     = 'news';
 
     /** @var  string */
     protected $originalPath;
@@ -40,44 +41,44 @@ class ImageHandler
         $this->imageManager = new ImageManager(array('driver' => 'imagick'));
     }
 
-    public function getImageUrl($fileName, $type, $format)
+    public function getImageUrl($fileName, $format)
     {
-        return sprintf('%s/%s/%s/%s', $this->webThumbnailPath, $type, $format, $fileName);
+        return sprintf('%s/%s/%s', $this->webThumbnailPath, $format, $fileName);
     }
 
-    public function getOriginal($filename, $type)
+    public function getOriginal($filename)
     {
-        return $this->originalPath.'/'.$type.'/'.$filename;
+        return $this->originalPath.'/'.$filename;
     }
 
-    public function getThumbnail($filename, $type, $format)
+    public function getThumbnail($filename, $format)
     {
-        return $this->thumbnailPath.'/'.$type.'/'.$format.'/'.$filename;
+        return $this->thumbnailPath.'/'.$format.'/'.$filename;
     }
 
-    public function upload(UploadedFile $file, $type, $name)
+    public function upload(UploadedFile $file, $subDirectory, $name)
     {
-        $this->mkOriginDir($type);
-        $newFileName = $name.'.'.$file->getClientOriginalExtension();
+        $this->mkOriginDir($subDirectory);
+        $newFileName = $name.'.'.strtolower($file->getClientOriginalExtension());
 
-        $file->move($this->originalPath.'/'.$type, $newFileName);
-        $this->createThumbnails($newFileName, $type);
+        $file->move($this->originalPath.'/'.$subDirectory, $newFileName);
+        $this->createThumbnails($newFileName, $subDirectory);
 
         return $newFileName;
     }
 
-    public function createThumbnails($originalFileName, $type)
+    public function createThumbnails($originalFileName, $subDirectory)
     {
-        $this->mkThumbnailDirs($type);
+        $this->mkThumbnailDirs($subDirectory);
 
-        $image = $this->imageManager->make($this->originalPath.'/'.$type.'/'.$originalFileName);
+        $image = $this->imageManager->make($this->originalPath.'/'.$subDirectory.'/'.$originalFileName);
         $image->backup();
 
         foreach ($this->formats as $format => $closure) {
             $image->reset();
             $closure($image);
 
-            $image->save($this->thumbnailPath.'/'.$type.'/'.$format.'/'.$originalFileName);
+            $image->save($this->thumbnailPath.'/'.$subDirectory.'/'.$format.'/'.$originalFileName);
         }
     }
 
@@ -89,19 +90,19 @@ class ImageHandler
         return $this->originalPath;
     }
 
-    protected function mkOriginDir($type)
+    protected function mkOriginDir($subDirectory)
     {
-        $dir = $this->originalPath.'/'.$type;
+        $dir = $this->originalPath.'/'.$subDirectory;
 
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
         }
     }
 
-    protected function mkThumbnailDirs($type)
+    protected function mkThumbnailDirs($subDirectory)
     {
         foreach (array_keys($this->formats) as $format) {
-            $dir = $this->thumbnailPath.'/'.$type.'/'.$format;
+            $dir = $this->thumbnailPath.'/'.$subDirectory.'/'.$format;
 
             if (!is_dir($dir)) {
                 mkdir($dir, 0777, true);

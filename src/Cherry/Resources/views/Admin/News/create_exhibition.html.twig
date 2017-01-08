@@ -1,14 +1,13 @@
 {% extends "Admin/adminLayout.html.twig" %}
-{% block title %}Add new Art Work{% endblock %}
+{% block title %}Add new Exhibition{% endblock %}
 {% block head_assets %}
     {{ parent() }}
     <link rel="stylesheet" href="/assets/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/assets/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
 {% endblock %}
 {% block content %}
-    <h1>Add new Art Work</h1>
-
-    <form enctype="multipart/form-data" action="{{ path('admin_art_works_create') }}" method="post">
+    <h1>Add new Exhibition</h1>
+    <form enctype="multipart/form-data" action="{{ path('admin_news_create_type', {type: 'exhibition'}) }}" method="post">
         {{ form_start(form) }}
         {{ form_errors(form) }}
 
@@ -20,38 +19,14 @@
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="en">
                 {{ form_row(form.title_en) }}
-                {{ form_row(form.description_en) }}
-                {{ form_row(form.materials_en) }}
+                {{ form_row(form.text_en) }}
             </div>
             <div role="tabpanel" class="tab-pane" id="uk">
                 {{ form_row(form.title_uk) }}
-                {{ form_row(form.description_uk) }}
-                {{ form_row(form.materials_uk) }}
+                {{ form_row(form.text_uk) }}
             </div>
         </div>
-
         {{ form_row(form.slug) }}
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon1">
-                        <span class="glyphicon glyphicon-resize-horizontal" aria-hidden="true"></span> {{ form_label(form.width) }}
-                    </span>
-                    {{ form_widget(form.width) }}
-                </div>
-                {{ form_errors(form.width) }}
-            </div><!-- /.col-lg-6 -->
-            <div class="col-lg-6">
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon1">
-                        <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span> {{ form_label(form.height) }}
-                    </span>
-                    {{ form_widget(form.height) }}
-                </div>
-                {{ form_errors(form.height) }}
-            </div><!-- /.col-lg-6 -->
-        </div>
-        <br />
         <div class="row">
             <div class='col-sm-6'>
                 <div class="form-group">
@@ -66,8 +41,6 @@
                 </div>
             </div>
         </div>
-        {{ form_row(form.price) }}
-        {{ form_row(form.in_stock) }}
         <div class="form-group">
             {{ form_label(form.picture) }}<br />
             {{ form_errors(form.picture) }}
@@ -116,8 +89,8 @@
         })
     </script>
     <script>
-        CKEDITOR.replace( 'art_work_description_en' );
-        CKEDITOR.replace( 'art_work_description_uk' );
+        CKEDITOR.replace( 'news_exhibition_text_en' );
+        CKEDITOR.replace( 'news_exhibition_text_uk' );
     </script>
     <script type="text/javascript">
         $(function () {

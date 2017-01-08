@@ -6,9 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="/admin.ico">
     <title>{% block title %}{% endblock %}</title>
-    {% block css %}
+    {% block head_assets %}
         <link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="/assets/admin.css" rel="stylesheet">
+        <script src="/assets/jquery/dist/jquery.min.js"></script>
+        <script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="/assets/handlebars/handlebars.min.js"></script>
     {% endblock %}
 </head>
 
@@ -45,8 +48,6 @@
     {% block content %}{% endblock %}
 </div>
 {% block javascript %}
-    <script src="/assets/jquery/dist/jquery.min.js"></script>
-    <script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
 {% endblock %}
 </body>
 </html>

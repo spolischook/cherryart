@@ -8,7 +8,7 @@
         <div class="gutter-sizer"></div>
         {% for work in works %}
             <div class="art-work">
-                <img src="{{ app.image_handler.getImageUrl(work.picture, 'art_work', 'front_end_two_columns') }}" />
+                <img src="{{ app.image_handler.getImageUrl(work.picture, 'front_end_two_columns') }}" />
                 <div class="art-work-details">
                     <p>{{ attribute(work, 'title_'~global.request.get('_locale')) }}</p>
                 </div>
