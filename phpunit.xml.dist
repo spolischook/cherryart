@@ -20,4 +20,12 @@
             <directory>./src/Cherry/Tests/</directory>
         </testsuite>
     </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src</directory>
+            <exclude>
+                <directory>src/Cherry/Tests</directory>
+            </exclude>
+        </whitelist>
+    </filter>
 </phpunit>
