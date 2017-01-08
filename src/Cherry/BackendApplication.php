@@ -4,6 +4,7 @@ namespace Cherry;
 
 use Cherry\Command\GenerateThumbnails;
 use Cherry\Command\ImportJomGallery;
+use Cherry\Command\ImportJoomlaArticles;
 use Cherry\Form\ArtWorkType;
 use Cherry\Form\NewsExhibitionType;
 
@@ -26,6 +27,10 @@ class BackendApplication extends Application
 
         $this['import_jom_gallery_command'] = function ($app) {
             return new ImportJomGallery($app['image_handler'], $app['db']);
+        };
+
+        $this['import_joomla_articles_command'] = function ($app) {
+            return new ImportJoomlaArticles($app['image_handler'], $app['db']);
         };
 
         $app['art_work_type'] = function ($app) {

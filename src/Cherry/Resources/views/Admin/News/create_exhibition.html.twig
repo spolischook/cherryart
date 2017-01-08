@@ -47,13 +47,10 @@
             {{ form_widget(form.picture) }}
         </div>
 
-        <label>Images</label>
-        <ul id="image-fields-list"
-            data-prototype="{{ form_widget(form.images.vars.prototype)|e }}">
-        </ul>
-
-        <a href="#" class="btn btn-default  btn-sm" id="add-another-image">+ Add image</a>
+        {{ form_label(form.images) }}<br />
+        {{ form_widget(form.images) }}
         <br />
+        {% include 'Admin/Widget/art_works_collection_form.html.twig' with {'form': form} %}
         <br />
         <input type="submit" class="btn btn-success" name="submit" value="Save Art Work" />
         {{ form_end(form) }}
@@ -64,30 +61,7 @@
     <script type="text/javascript" src="/assets/ckeditor/ckeditor.js"></script>
     <script type="text/javascript" src="/assets/moment/min/moment-with-locales.min.js"></script>
     <script type="text/javascript" src="/assets/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-    <script type="text/javascript">
-        // keep track of how many image fields have been rendered
-        var imageCount = '{{ form.images|length }}';
-
-        jQuery(document).ready(function() {
-            jQuery('#add-another-image').click(function(e) {
-                e.preventDefault();
-
-                var imageList = jQuery('#image-fields-list');
-
-                // grab the prototype template
-                var newWidget = imageList.attr('data-prototype');
-                // replace the "__name__" used in the id and name of the prototype
-                // with a number that's unique to your images
-                // end name attribute looks like name="contact[images][2]"
-                newWidget = newWidget.replace(/__name__/g, imageCount);
-                imageCount++;
-
-                // create a new list element and add it to the list
-                var newLi = jQuery('<li></li>').html(newWidget);
-                newLi.appendTo(imageList);
-            });
-        })
-    </script>
+    <script type="text/javascript" src="/remove-image.js"></script>
     <script>
         CKEDITOR.replace( 'news_exhibition_text_en' );
         CKEDITOR.replace( 'news_exhibition_text_uk' );

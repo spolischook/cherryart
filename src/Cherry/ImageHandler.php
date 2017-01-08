@@ -30,9 +30,10 @@ class ImageHandler
      * ImageManager constructor.
      * @param string $originalPath
      * @param string $thumbnailPath
+     * @param string $webThumbnailPath
      * @param array $formats
      */
-    public function __construct($originalPath, $thumbnailPath, $webThumbnailPath, array $formats)
+    public function __construct(string $originalPath, string $thumbnailPath, string $webThumbnailPath, array $formats)
     {
         $this->originalPath = $originalPath;
         $this->thumbnailPath = $thumbnailPath;
@@ -56,7 +57,7 @@ class ImageHandler
         return $this->thumbnailPath.'/'.$format.'/'.$filename;
     }
 
-    public function upload(UploadedFile $file, $subDirectory, $name)
+    public function upload(UploadedFile $file, string $subDirectory, string $name): string
     {
         $this->mkOriginDir($subDirectory);
         $newFileName = $name.'.'.strtolower($file->getClientOriginalExtension());
@@ -64,10 +65,10 @@ class ImageHandler
         $file->move($this->originalPath.'/'.$subDirectory, $newFileName);
         $this->createThumbnails($newFileName, $subDirectory);
 
-        return $newFileName;
+        return $subDirectory.'/'.$newFileName;
     }
 
-    public function createThumbnails($originalFileName, $subDirectory)
+    public function createThumbnails(string $originalFileName, string $subDirectory)
     {
         $this->mkThumbnailDirs($subDirectory);
 
@@ -78,19 +79,19 @@ class ImageHandler
             $image->reset();
             $closure($image);
 
-            $image->save($this->thumbnailPath.'/'.$subDirectory.'/'.$format.'/'.$originalFileName);
+            $image->save($this->thumbnailPath.'/'.$format.'/'.$subDirectory.'/'.$originalFileName);
         }
     }
 
     /**
      * @return string
      */
-    public function getOriginalPath()
+    public function getOriginalPath(): string
     {
         return $this->originalPath;
     }
 
-    protected function mkOriginDir($subDirectory)
+    protected function mkOriginDir(string $subDirectory)
     {
         $dir = $this->originalPath.'/'.$subDirectory;
 
@@ -99,7 +100,7 @@ class ImageHandler
         }
     }
 
-    protected function mkThumbnailDirs($subDirectory)
+    protected function mkThumbnailDirs(string $subDirectory)
     {
         foreach (array_keys($this->formats) as $format) {
             $dir = $this->thumbnailPath.'/'.$subDirectory.'/'.$format;

@@ -31,8 +31,8 @@ class ImageCollectionTransformer implements DataTransformerInterface
      */
     public function transform($data)
     {
-        if (null === $data) {
-            return null;
+        if (!isset($data['images'])) {
+            return $data;
         }
 
         $data['images']  = $this->transformImages($data);

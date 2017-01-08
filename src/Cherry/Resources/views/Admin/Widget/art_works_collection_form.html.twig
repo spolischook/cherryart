@@ -25,7 +25,7 @@
                         <a href="#" onclick="addToAttachedArtWorks(event, this)" data-obj="{{ stringify }}" class="thumbnail">
                             <img src="/images/admin_preview/{{ picture }}" alt="{{ title_uk }}">
                             <div class="caption">
-                                <h4>{{ title_uk }}</h4>
+                                <h4 style="display: inline">{{ title_uk }}</h4>
                             </div>
                         </a>
                     </div>
@@ -79,6 +79,7 @@
 
     document.addEventListener("DOMContentLoaded", initVariables);
     document.addEventListener("DOMContentLoaded", showAttachedArtworks);
+    document.addEventListener("DOMContentLoaded", searchArtWorks);
 
     function initVariables() {
         attachedArtWorkssource   = $("#attached-art-works-template").html();
@@ -126,10 +127,7 @@
         showAttachedArtworks();
         searchArtWorks();
     }
-</script>
 
-
-<script>
     var artWorkSearchSource   = $("#art-works-search-results-template").html(),
         artWorkSearchTemplate = Handlebars.compile(artWorkSearchSource),
         searchResultContainer = $('#art-works-search-results'),
@@ -148,10 +146,6 @@
     });
 
     function searchArtWorks() {
-        if ('' == getSearchString()) {
-            searchResultContainer.empty();
-            return;
-        }
         $.ajax({
             url: searchLink+'?title='+getSearchString(),
             method: 'GET'

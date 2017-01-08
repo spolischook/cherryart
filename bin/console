@@ -10,5 +10,6 @@ $webApp = new Cherry\BackendApplication();
 
 $consoleApp->add($webApp['thumbnail_generation_command']);
 $consoleApp->add($webApp['import_jom_gallery_command']);
+$consoleApp->add($webApp['import_joomla_articles_command']);
 
 $consoleApp->run();

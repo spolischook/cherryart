@@ -20,12 +20,10 @@ class ArtWorksTransformer implements DataTransformerInterface
      */
     public function transform($data)
     {
-        if (null === $data) {
-            return null;
-        }
-
         if (!isset($data['id'])) {
-            return null;
+            $data['art_works'] = '[]';
+
+            return $data;
         }
 
         $data['art_works'] = json_encode($this->newsRepository->findArtWorks($data['id']));

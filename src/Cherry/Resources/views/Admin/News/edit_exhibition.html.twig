@@ -50,7 +50,7 @@
         </div>
 
         {{ form_label(form.images) }}<br />
-        <div class="row">
+        <div class="row image-container-overflow">
             {% for image in form.images.vars.data %}
                 <div class="delete-image-container image-container">
                     <img src="{{ app.image_handler.getImageUrl(image.pathName, 'admin_preview') }}" class="img-thumbnail">
