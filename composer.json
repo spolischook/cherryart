@@ -18,7 +18,8 @@
         "doctrine/dbal": "~2.2",
         "intervention/image": "^2.3",
         "symfony/console": "^3.2",
-        "symfony/yaml": "^3.2"
+        "symfony/yaml": "^3.2",
+        "gedmo/doctrine-extensions": "^2.4"
     },
     "autoload": {
         "psr-4": { "Cherry\\": "src/Cherry/"}
