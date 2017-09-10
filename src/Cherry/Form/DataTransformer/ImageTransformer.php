@@ -31,11 +31,11 @@ class ImageTransformer implements DataTransformerInterface
      */
     public function transform($data)
     {
-        if (!isset($data['picture'])) {
+        if (!$data->getPicture()) {
             return $data;
         }
 
-        $data['picture'] = $this->transformPicture($data);
+        $data->setPicture($this->transformPicture($data));
 
         return $data;
     }
@@ -54,13 +54,9 @@ class ImageTransformer implements DataTransformerInterface
      * @param array $data
      * @return File|null
      */
-    protected function transformPicture(array $data)
+    protected function transformPicture($data)
     {
-        if (!$data['picture']) {
-            return null;
-        }
-
-        return new File($data['picture'], false);
+        return new File($data->getPicture(), false);
     }
 
     /**

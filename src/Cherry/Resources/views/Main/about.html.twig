@@ -3,5 +3,9 @@
 {% set page_title = 'about_artist_page'|trans %}
 
 {% block content %}
-    <h1>{{ 'tetiana_cherevan'|trans }}</h1>
+    <img src="/ava.jpg" style="max-width: 320px; max-height: 320px; margin: 0 1em 1em 0; float: left" alt="" />
+    <div class="about">
+        {{ 'biography'|trans|raw }}
+    </div>
+    <div style="clear:both;"></div>
 {% endblock %}

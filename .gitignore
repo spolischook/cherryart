@@ -4,4 +4,6 @@
 /image_originals/
 /web/assets/
 /web/images/
+/webAdmin/assets/
+/images/*
 app.db

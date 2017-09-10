@@ -9,9 +9,11 @@ use Cherry\Form\DataTransformer\ArtWorksTransformer;
 use Cherry\Form\DataTransformer\ImageCollectionTransformer;
 use Cherry\Form\DataTransformer\ImageTransformer;
 use Cherry\ImageHandler;
+use Cherry\Model\ArtWork;
 use Cherry\Repository\NewsRepository;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -59,10 +61,6 @@ class NewsExhibitionType extends AbstractType
                 'required' => false,
             ])
             ->add('date', TextType::class, [
-                'constraints' => [new Assert\Regex([
-                    'pattern' => '/\d{4}-\d{2}-\d{2}/',
-                    'message' => 'The data must be in format YYYY-MM-DD',
-                ])],
                 'empty_data' => $today->format('Y-m-d'),
                 'required' => false,
             ])
@@ -70,8 +68,9 @@ class NewsExhibitionType extends AbstractType
             ->add('type', HiddenType::class, [
                 'empty_data' => 'exhibition',
             ])
-            ->add('picture', FileType::class, [
+            ->add('picture', PictureType::class, [
                 'required' => false,
+                'subdirectory' => 'news'
             ])
             ->add('images', FileType::class, [
                 'multiple' => true,
@@ -82,11 +81,31 @@ class NewsExhibitionType extends AbstractType
             ])
         ;
 
-        $builder->addModelTransformer(new ImageTransformer($this->imageHandler, ImageHandler::TYPE_NEWS));
+        $builder->get('date')->addModelTransformer(new CallbackTransformer(
+            function (\DateTime $date) {
+                return $date->format('Y-m-d');
+            },
+            function (string $date) {
+                return new \DateTime($date);
+            }
+        ));
+
+        $builder->get('art_works')->addModelTransformer(new CallbackTransformer(
+            function (array $artWorks) {
+                return json_encode($artWorks);
+            },
+            function (string $artWorks) {
+                return array_map(function (array $data) {
+                    return ArtWork::find($data['id']);
+                }, json_decode($artWorks));
+            }
+        ));
+
+//        $builder->addModelTransformer(new ImageTransformer($this->imageHandler, ImageHandler::TYPE_NEWS));
         $builder->addModelTransformer(new ImageCollectionTransformer($this->imageHandler, ImageHandler::TYPE_NEWS));
-        $builder->addModelTransformer(new ArtWorksTransformer($this->newsRepository));
-        $builder->addEventSubscriber(new AddImageListener());
-        $builder->addEventSubscriber(new AddImageCollectionListener());
+//        $builder->addModelTransformer(new ArtWorksTransformer($this->newsRepository));
+//        $builder->addEventSubscriber(new AddImageListener());
+//        $builder->addEventSubscriber(new AddImageCollectionListener());
         $builder->addEventSubscriber(new UpdateUnixTimeListener());
     }
 }

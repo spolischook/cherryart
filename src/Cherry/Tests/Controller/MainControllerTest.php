@@ -2,9 +2,9 @@
 
 namespace Cherry\Tests\Controller;
 
-use Cherry\Tests\WebTestCase;
+use Cherry\Tests\WebFrontendTestCase;
 
-class MainControllerTest extends WebTestCase
+class MainControllerFrontendTest extends WebFrontendTestCase
 {
     public function testRedirectToDefaultLocale()
     {

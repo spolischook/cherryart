@@ -2,11 +2,13 @@
 
 namespace Cherry;
 
+use Cherry\Command\AddUnixTime;
 use Cherry\Command\GenerateThumbnails;
 use Cherry\Command\ImportJomGallery;
 use Cherry\Command\ImportJoomlaArticles;
 use Cherry\Form\ArtWorkType;
 use Cherry\Form\NewsExhibitionType;
+use Cherry\Form\PictureType;
 
 class BackendApplication extends Application
 {
@@ -33,15 +35,23 @@ class BackendApplication extends Application
             return new ImportJoomlaArticles($app['image_handler'], $app['db']);
         };
 
+        $this['test_command'] = function ($app) {
+            return new AddUnixTime($app['image_handler'], $app['db']);
+        };
+
         $app['art_work_type'] = function ($app) {
             return new ArtWorkType($app['image_handler']);
         };
         $app['news_exhibition_type'] = function ($app) {
             return new NewsExhibitionType($app['image_handler'], $app['repository_news']);
         };
+        $app['picture_type'] = function ($app) {
+            return new PictureType($app['image_handler']);
+        };
         $app->extend('form.types', function ($types) use ($app) {
             $types[] = 'art_work_type';
             $types[] = 'news_exhibition_type';
+            $types[] = $app['picture_type'];
 
             return $types;
         });

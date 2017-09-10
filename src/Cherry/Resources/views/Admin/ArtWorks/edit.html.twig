@@ -72,9 +72,10 @@
 
         {{ form_row(form.price) }}
         {{ form_row(form.in_stock) }}
+        {{ form_row(form.on_front) }}
         <div class="form-group">
             {{ form_label(form.picture) }}<br />
-            <img src="{{ app.image_handler.getImageUrl(form.picture.vars.data.pathName, 'admin_preview') }}" class="img-thumbnail">
+            <img src="{{ app.image_handler.getImageUrl(form.picture.vars.data.fileName, 'admin_preview') }}" class="img-thumbnail">
             {{ form_errors(form.picture) }}
             {{ form_widget(form.picture) }}
         </div>
@@ -94,6 +95,7 @@
             {% endfor %}
         </div>
         {{ form_widget(form.images) }}
+        {{ form_errors(form.images) }}
         <br />
         <br />
         <input type="submit" class="btn btn-success" name="submit" value="Save Art Work" />

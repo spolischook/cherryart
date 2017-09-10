@@ -12,8 +12,10 @@
 >
     <php>
         <const name="WEB_SERVER_HOST" value="localhost" />
-        <const name="WEB_SERVER_PORT" value="8000" />
-        <const name="WEB_SERVER_DOCROOT" value="./web" />
+        <const name="WEB_SERVER_PORT_FRONTEND" value="8100" />
+        <const name="WEB_SERVER_PORT_BACKEND" value="8200" />
+        <const name="WEB_SERVER_DOCROOT_FRONTEND" value="./web" />
+        <const name="WEB_SERVER_DOCROOT_BACKEND" value="./webAdmin" />
     </php>
     <testsuites>
         <testsuite name="CherryApp Test Suite">

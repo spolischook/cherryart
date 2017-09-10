@@ -1,0 +1,23 @@
+{
+  "name": "cherryart-admin",
+  "description": "Personal site for Tetiana Cherevan",
+  "main": "index.js",
+  "authors": [
+    "Serhii Polishchuk"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/spolischook/cherryart",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "v3.3.7",
+    "ckeditor": "^4.6.1",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.43"
+  }
+}

@@ -23,9 +23,9 @@
                 {{#each results}}
                     <div class="col-xs-6 col-md-3">
                         <a href="#" onclick="addToAttachedArtWorks(event, this)" data-obj="{{ stringify }}" class="thumbnail">
-                            <img src="/images/admin_preview/{{ picture }}" alt="{{ title_uk }}">
+                            <img src="{{ ../webPath }}/admin_preview/{{ picture }}" alt="{{ titleUk }}">
                             <div class="caption">
-                                <h4 style="display: inline">{{ title_uk }}</h4>
+                                <h4 style="display: inline">{{ titleUk }}</h4>
                             </div>
                         </a>
                     </div>
@@ -45,9 +45,9 @@
             {{#each artWorks}}
                 <div class="col-xs-6 col-md-3">
                     <div class="thumbnail image-container">
-                        <img src="/images/admin_preview/{{ picture }}" alt="{{ title_uk }}">
+                        <img src="{{ ../webPath }}/admin_preview/{{ picture }}" alt="{{ titleUk }}">
                         <div class="caption">
-                            <h4>{{ title_uk }}</h4>
+                            <h4>{{ titleUk }}</h4>
                         </div>
                         <input
                                 class="hover-delete-button btn btn-danger"
@@ -89,7 +89,10 @@
     }
 
     function showAttachedArtworks() {
-        attachedArtWorksContainer.empty().append(attachedArtWorksTemplate({'artWorks': getFormArtWorks()}));
+        attachedArtWorksContainer.empty().append(attachedArtWorksTemplate({
+            'artWorks': getFormArtWorks(),
+            'webPath': "{{ app.image_handler.getWebThumbnailPath}}"
+        }));
     }
 
     function addToAttachedArtWorks(e, element) {
@@ -142,7 +145,6 @@
     ;
     $('#art-works-search').keyup(function () {
         delay(searchArtWorks, 1000 );
-        $('html,body').animate({ scrollTop: searchResultContainer.offset().top}, 'slow');
     });
 
     function searchArtWorks() {
@@ -153,7 +155,11 @@
             if (!jqXHR || !jqXHR.status || jqXHR.status != 200) {
                 searchResultContainer.append('oops');
             } else {
-                searchResultContainer.empty().append(artWorkSearchTemplate({'results': removeExistingItems(data), 'searchString': getSearchString()}));
+                searchResultContainer.empty().append(artWorkSearchTemplate({
+                    'results': removeExistingItems(data),
+                    'searchString': getSearchString(),
+                    'webPath': "{{ app.image_handler.getWebThumbnailPath}}"
+                }));
             }
         }).fail(function () {
             searchResultContainer.append('oops');

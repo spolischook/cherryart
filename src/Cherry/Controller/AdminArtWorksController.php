@@ -4,6 +4,7 @@ namespace Cherry\Controller;
 
 use Cherry\Application;
 use Cherry\ImageHandler;
+use Cherry\Model\ArtWork;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,8 +22,7 @@ class AdminArtWorksController
 
     public function editAction($slug, Application $app, Request $request)
     {
-        $sql = "SELECT * FROM art_works WHERE slug = ?";
-        $work = $app['db']->fetchAssoc($sql, [$slug]);
+        $work = ArtWork::findOneBySlug($slug);
 
         if (!$work) {
             throw new NotFoundHttpException(sprintf('Art work with "%s" slug not found', $slug));
@@ -33,9 +33,10 @@ class AdminArtWorksController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+            /** @var ArtWork $data */
             $data = $form->getData();
-            $app['db']->update('art_works', $data, ['slug' => $data['slug']]);
-            $app['session']->getFlashBag()->add('success', sprintf('"%s" was updated', $work['title_en']));
+            $data->save();
+            $app['session']->getFlashBag()->add('success', sprintf('"%s" was updated', $data->getTitleEn()));
 
             return $app->redirect($app["url_generator"]->generate("admin_art_works"));
         }
@@ -48,12 +49,13 @@ class AdminArtWorksController
     public function createAction(Application $app, Request $request)
     {
         /** @var Form $form */
-        $form = $app['form.factory']->create('art_work_type');
+        $form = $app['form.factory']->create('art_work_type', new ArtWork());
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $data = $form->getData();
-            $app['db']->insert('art_works', $data);
+            /** @var ArtWork $artWork */
+            $artWork = $form->getData();
+            $artWork->save();
             $app['session']->getFlashBag()->add('success', 'New Art work was created');
 
             return $app->redirect($app["url_generator"]->generate("admin_art_works"));

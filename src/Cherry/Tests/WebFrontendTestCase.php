@@ -5,7 +5,7 @@ namespace Cherry\Tests;
 use Cherry\FrontendApplication;
 use Silex\WebTestCase as BaseWebTestCase;
 
-class WebTestCase extends BaseWebTestCase
+abstract class WebFrontendTestCase extends BaseWebTestCase
 {
     /**
      * {@inheritdoc}
@@ -15,7 +15,7 @@ class WebTestCase extends BaseWebTestCase
         return parent::createClient(
             array_merge(
                 $server,
-                ['HTTP_HOST' => WEB_SERVER_HOST.':'.WEB_SERVER_PORT]
+                ['HTTP_HOST' => WEB_SERVER_HOST.':'.WEB_SERVER_PORT_FRONTEND]
             )
         );
     }

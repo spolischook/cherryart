@@ -21,8 +21,8 @@
                 <tr>
                     <th scope="row">{{ loop.index }}</th>
                     <td><img src="{{ app.image_handler.getImageUrl(item.picture, 'admin') }} " class="img-thumbnail"></td>
-                    <td>{{ item.title_en }}(en)<br />{{ item.title_uk }}(uk)</td>
-                    <td>{{ item.date }}</td>
+                    <td>{{ item.titleEn }}(en)<br />{{ item.titleUk }}(uk)</td>
+                    <td>{{ item.date|date('Y-m-d') }}</td>
                     <td>{{ item.type|trans }}</td>
                     <td>
                         <div class="btn-group">

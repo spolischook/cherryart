@@ -4,6 +4,7 @@ namespace Cherry\Form\DataTransformer;
 
 use Cherry\ImageHandler;
 use Symfony\Component\Form\DataTransformerInterface;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -16,11 +17,16 @@ class ImageCollectionTransformer implements DataTransformerInterface
     protected $imageHandler;
 
     /**
+     * @var array
+     */
+    protected $images;
+
+    /**
      * @var string
      */
     protected $imageType;
 
-    public function __construct(ImageHandler $imageHandler, $imageType)
+    public function __construct(ImageHandler $imageHandler, string $imageType)
     {
         $this->imageHandler = $imageHandler;
         $this->imageType    = $imageType;
@@ -29,15 +35,15 @@ class ImageCollectionTransformer implements DataTransformerInterface
     /**
      * {@inheritdoc}
      */
-    public function transform($data)
+    public function transform($data = null)
     {
-        if (!isset($data['images'])) {
-            return $data;
+        $this->images = $data;
+
+        if (!$data) {
+            return [];
         }
 
-        $data['images']  = $this->transformImages($data);
-
-        return $data;
+        return $this->transformImages($data);
     }
 
     /**
@@ -45,24 +51,18 @@ class ImageCollectionTransformer implements DataTransformerInterface
      */
     public function reverseTransform($data)
     {
-        $data['images']  = $this->reverseTransformImages($data);
-
-        return $data;
+        return $this->reverseTransformImages($data);
     }
 
     /**
      * @param array $data
-     * @return array
+     * @return File[]
      */
     protected function transformImages(array $data)
     {
-        if (!$data['images']) {
-            return [];
-        }
-
         return array_map(function ($filename) {
             return new File($filename, false);
-        }, explode(',', $data['images']));
+        }, $data);
     }
 
     /**
@@ -71,16 +71,16 @@ class ImageCollectionTransformer implements DataTransformerInterface
      */
     protected function reverseTransformImages(array $data)
     {
-        if (!$data['images']) {
-            return null;
+        if (is_null($this->images)) {
+            throw new TransformationFailedException('You must create from with entity, and only after handle request');
         }
 
-        return implode(',', array_filter(array_map(function ($file) use ($data) {
-            if (null === $file) {
-                return null;
+        return array_filter(array_map(function ($file) use ($data) {
+            if (is_string($file)) {
+                return $file;
             }
 
-            if (UploadedFile::class === get_class($file)) {
+            if (is_object($file) && UploadedFile::class === get_class($file)) {
                 return $this->imageHandler->upload(
                     $file,
                     $this->imageType,
@@ -88,12 +88,8 @@ class ImageCollectionTransformer implements DataTransformerInterface
                 );
             }
 
-            if (File::class === get_class($file)) {
-                return $file->getPathName();
-            }
+            throw new UnexpectedTypeException($file, 'UploadedFile|string');
 
-            throw new UnexpectedTypeException($file, 'null|UploadedFile|File');
-
-        }, $data['images'])));
+        }, array_merge($this->images, $data)));
     }
 }

@@ -74,12 +74,22 @@
             {{ form_widget(form.picture) }}
         </div>
 
-        <label>Images</label>
-        <ul id="image-fields-list"
-            data-prototype="{{ form_widget(form.images.vars.prototype)|e }}">
-        </ul>
-
-        <a href="#" class="btn btn-default  btn-sm" id="add-another-image">+ Add image</a>
+        {{ form_label(form.images) }}<br />
+        <div class="row">
+            {% for image in form.images.vars.data %}
+                <div class="delete-image-container image-container">
+                    <img src="{{ app.image_handler.getImageUrl(image.pathName, 'admin_preview') }}" class="img-thumbnail">
+                    <input
+                            class="delete-image-button hover-delete-button"
+                            data-delete-link="{{ path('admin_art_works_remove_image', {'imageFileNameForDelete': image.fileName, 'slug': form.slug.vars.value}) }}"
+                            type="button"
+                            value=" DELETE "
+                    />
+                </div>
+            {% endfor %}
+        </div>
+        {{ form_widget(form.images) }}
+        {{ form_errors(form.images) }}
         <br />
         <br />
         <input type="submit" class="btn btn-success" name="submit" value="Save Art Work" />

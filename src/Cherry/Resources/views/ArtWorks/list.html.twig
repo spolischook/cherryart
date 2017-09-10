@@ -3,30 +3,25 @@
 {% set page_title = 'menu.art_works'|trans %}
 
 {% block content %}
-    <div id="art-works-list">
+    <section id="art-works-list">
         <div class="grid-sizer"></div>
         <div class="gutter-sizer"></div>
         {% for work in works %}
-            <div class="art-work">
-                <img src="{{ app.image_handler.getImageUrl(work.picture, 'front_end_two_columns') }}" />
+            <article class="art-work">
+                <img src="{{ app.image_handler.getImageUrl(work.picture, 'front_end_two_columns') }}" alt="" />
                 <div class="art-work-details">
-                    <p>{{ attribute(work, 'title_'~global.request.get('_locale')) }}</p>
+                    <h4>{{ attribute(work, 'title_'~global.request.get('_locale')) }}</h4>
                 </div>
-            </div>
+            </article>
         {% endfor %}
-    </div>
+    </section>
 {% endblock %}
 {% block scripts %}
     {{ parent() }}
     <script>
-        var grid = document.getElementById('art-works-list');
-        imagesLoaded( grid, function() {
-            var msnry = new Masonry( grid, {
-                itemSelector: ".art-work",
-                columnWidth: '.art-work',
-                gutter: '.gutter-sizer',
-                percentPosition: true
-            });
+        ArtWorksGridInit();
+        document.querySelectorAll('#art-works-list img').forEach(function (element) {
+            element.onclick = showArtWork;
         });
     </script>
 {% endblock %}

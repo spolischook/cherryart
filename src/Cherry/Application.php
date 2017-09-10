@@ -3,6 +3,7 @@
 namespace Cherry;
 
 use Cherry\Repository\NewsRepository;
+use Doctrine\DBAL\Connection;
 use Intervention\Image\Image;
 use Silex\Application as BaseApplication;
 use Silex\Application\FormTrait;
@@ -12,6 +13,9 @@ use Symfony\Component\Translation\Translator;
 class Application extends BaseApplication
 {
     use FormTrait;
+
+    /** @var Connection */
+    static public $db;
 
     /**
      * {@inheritdoc}
@@ -50,11 +54,13 @@ class Application extends BaseApplication
             return new NewsRepository($app['db']);
         };
 
+        self::$db = $app['db'];
+
         $this['image_handler'] = function () {
             return new ImageHandler(
                 realpath(__DIR__.'/../../image_originals'),
-                realpath(__DIR__.'/../../web/images'),
-                '/images',
+                realpath(__DIR__.'/../../images'),
+                'http://images.cherryart.local',
                 [
                     'admin' => function (Image $image) {
                         return $image->heighten(70)->crop(70, 70);
