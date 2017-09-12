@@ -409,7 +409,7 @@ input.serach-form-submit:hover {
 	}
 }
 
-.grid-item a.post-link {
+.grid-item .post-link {
 	display: block;
 	position: relative;
 	box-sizing: border-box;	
@@ -417,7 +417,7 @@ input.serach-form-submit:hover {
 
 /*Post Grid*/
 
-a.post-link {
+.post-link {
 	display: block;
     position: relative;
     width: 100%;
@@ -441,7 +441,7 @@ a.post-link {
 	transition: all .50s;
 }
 
-a.post-link:hover .post-title-container {
+.post-link:hover .post-title-container {
 	opacity: 1;
 }
 
