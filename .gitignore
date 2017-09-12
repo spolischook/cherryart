@@ -1,6 +1,7 @@
 /bin/
 /vendor/
 /bower_components/
+/node_modules/*
 /image_originals/
 /web/assets/
 /web/images/

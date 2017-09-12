@@ -66,9 +66,9 @@ class News extends ActiveRecord
     }
 
     /**
-     * @param string $id
+     * {@inheritdoc}
      */
-    public function setId(string $id)
+    public function setId($id)
     {
         $this->id = $id;
     }
@@ -262,5 +262,13 @@ class News extends ActiveRecord
     {
         $values['date'] = new \DateTime($values['date']);
         $values['images'] = explode(',', $values['images']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        // TODO: Implement jsonSerialize() method.
     }
 }

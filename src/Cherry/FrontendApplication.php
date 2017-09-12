@@ -34,17 +34,21 @@ class FrontendApplication extends Application
             ->get('/{_locale}/art-works/{slug}', 'Cherry\\Controller\\ArtWorksController::viewAction')
             ->bind('art_work')
             ->assert('_locale', $localeRouteRequirments);
-        $this
-            ->get('/{_locale}/art-works', 'Cherry\\Controller\\ArtWorksController::listAction')
-            ->bind('art_works')
-            ->assert('_locale', $localeRouteRequirments);
+//        $this
+//            ->get('/{_locale}/art-works', 'Cherry\\Controller\\ArtWorksController::listAction')
+//            ->bind('art_works')
+//            ->assert('_locale', $localeRouteRequirments);
         $this
             ->get('/{_locale}/Tetiana-Cherevan', 'Cherry\\Controller\\MainController::aboutMeAction')
             ->bind('about')
             ->assert('_locale', $localeRouteRequirments);
         $this
-            ->get('/{_locale}/', 'Cherry\\Controller\\MainController::homepageAction')
-            ->bind('homepage')
+            ->get('/{_locale}/', 'Cherry\\Controller\\ArtWorksController::listAction')
+            ->bind('art_works')
+            ->assert('_locale', $localeRouteRequirments);
+        $this
+            ->get('/{_locale}/cv', 'Cherry\\Controller\\MainController::cvAction')
+            ->bind('cv')
             ->assert('_locale', $localeRouteRequirments);
     }
 }

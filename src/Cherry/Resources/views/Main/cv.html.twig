@@ -1,0 +1,59 @@
+{% extends "layout.html.twig" %}
+
+{% set page_title = 'ehibitions_page_title'|trans %}
+
+{% block content %}
+    <div class="main-wrap">
+        <section>
+            <div class="container">
+                <div class="e-row">
+                    <div class="e-col-12">
+                        <div class="divider"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="container">
+                <div class="e-row">
+                    <div class="e-col-12">
+                        <h3>{{ 'solo_exhibitions_title'|trans }}</h3>
+                        <ul class="events-list">
+                            {{ 'solo_exhibitions'|trans|raw }}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="container">
+                <div class="e-row">
+                    <div class="e-col-12">
+                        <div class="divider"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="container">
+                <div class="e-row">
+                    <div class="e-col-12">
+                        <h3>{{ 'group_exhibitions_title'|trans }}</h3>
+                        <ul class="events-list">
+                            {{ 'group_exhibitions'|trans|raw }}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="container">
+                <div class="e-row">
+                    <div class="e-col-12">
+                        <div class="divider"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}

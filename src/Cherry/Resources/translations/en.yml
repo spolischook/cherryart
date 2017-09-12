@@ -1,10 +1,39 @@
 tetiana_cherevan: Tetiana Cherevan
 about_artist_page: About artist
+ehibitions_page_title: Exhibitions
 menu:
   home: Home
   art_works: Art Works
   about: About
 
+group_exhibitions_title: Group
+solo_exhibitions_title: Solo
+group_exhibitions: |
+    <li>2016 / Happy Art/  Munich/ Germany</li>
+    <li>2016 / GRID ART FAIR/ The Old Truman Brewer/ London/ England</li>
+    <li>2014 / Contemporary Painting MARTS UNFRAMED / M17 Contemporary Art Center/ Kyiv/ Ukraine</li>
+    <li>2013 / Art Project “Pilgrims”/ Ukrainian Cultural Foundation/ Kyiv/ Ukraine</li>
+    <li>2013 / Ukrainian Art exhibition/ Gallery “Art People”/ San Francisco/ USA</li>
+    <li>2013 / Ukrainian Art exhibition/ Gallery “Silvana”/ Los Angeles/ USA</li>
+    <li>2013 / Open Art Canada/ Michael Solovyev Studio/ Montreal/ Canada</li>
+    <li>2012 /Parallax Art Fair NYC/ New York/ USA</li>
+    <li>2012 / Living the dream/  Gallery “The Tree”/ Moscow</li>
+    <li>2011 / Ukrainian Art/ Gallery Flaxon Ptootch/ London</li>
+    <li>2010 / Russian Art Week/ House of Artists/  Moscow, Russia</li>
+    <li>2010 / Women in Art/ Gallery “Art-Miss”/ Paris/ France</li>
+    <li>2008 / Exhibition “Аrt-Кyiv”/ Kyiv/Ukraine</li>
+    <li>2003 / Modern Ukrainian Painting/  Russian House on Science and Culture/  Berlin/ Germany</li>
+    <li>2003 / Victoria/ Regional exhibition/ Arts Museum/ Cherkasy/Ukraine</li>
+    <li>2002 / Erotica in drawing/  Art  Museum/ Cherkasy/ Ukraine</li>
+solo_exhibitions: |
+    <li>2017 / The circle of Life/ Gallery of Folk Art/ Cherkasy/ Ukraine</li>
+    <li>2017 / Guardians/ Musical Memorial Museum/ Lviv/ Ukraine</li>
+    <li>2016 / Desire to fly/ KZ Art Room/ Kyiv/ Ukraine</li>
+    <li>2015 / Away from home/ Gallery Folk Art/ Cherkasy/Ukraine</li>
+    <li>2014 / Women guardians/ Gallery "Kostyurynskiy lane"/ Kharkiv/ Ukraine</li>
+    <li>2014 / Bearded/ Museum Kavaleridze VI/ Kyiv/ Ukraine</li>
+    <li>2010/ Permissible Faces/ Gallery "Art Space 365"/ Kyiv/ Ukraine</li>
+    <li>2008 / Desire to be/ Cherkasy Art Museum/ Ukraine</li>
 biography: |
   <p>
     Tetiana Cherevan (born 1975 in Cherkasy) is an Ukrainian artist.

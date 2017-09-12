@@ -3,25 +3,24 @@
 {% set page_title = 'menu.art_works'|trans %}
 
 {% block content %}
-    <section id="art-works-list">
+    <div class="grid post-grid">
         <div class="grid-sizer"></div>
         <div class="gutter-sizer"></div>
         {% for work in works %}
-            <article class="art-work">
-                <img src="{{ app.image_handler.getImageUrl(work.picture, 'front_end_two_columns') }}" alt="" />
-                <div class="art-work-details">
-                    <h4>{{ attribute(work, 'title_'~global.request.get('_locale')) }}</h4>
+            <div class="grid-item">
+                <div class="post-link">
+                    <div class="post-title-container">
+                        <div class="post-title">
+                            <p><span>{{ attribute(work, 'title_'~global.request.get('_locale')) }}</span></br>
+                                {#— Subheading —#}</p>
+                        </div>
+                    </div>
+                    <img src="{{ app.image_handler.getImageUrl(work.picture, 'front_end_two_columns') }}" alt="" />
                 </div>
-            </article>
+            </div>
         {% endfor %}
-    </section>
+    </div>
 {% endblock %}
 {% block scripts %}
     {{ parent() }}
-    <script>
-        ArtWorksGridInit();
-        document.querySelectorAll('#art-works-list img').forEach(function (element) {
-            element.onclick = showArtWork;
-        });
-    </script>
 {% endblock %}

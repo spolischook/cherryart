@@ -107,12 +107,7 @@ main section:last-child {
 
 #main {
 	padding-top: 69px;
-}
-
-@media screen and (max-width: 767px) {
-	#main {
-		padding-top: 98px;
-	}
+	min-height: 100vh;
 }
 
 .main-wrap {
@@ -409,7 +404,7 @@ input.serach-form-submit:hover {
 	}
 }
 
-.grid-item a.post-link {
+.grid-item .post-link {
 	display: block;
 	position: relative;
 	box-sizing: border-box;	
@@ -417,7 +412,7 @@ input.serach-form-submit:hover {
 
 /*Post Grid*/
 
-a.post-link {
+.post-link {
 	display: block;
     position: relative;
     width: 100%;
@@ -441,7 +436,7 @@ a.post-link {
 	transition: all .50s;
 }
 
-a.post-link:hover .post-title-container {
+.post-link:hover .post-title-container {
 	opacity: 1;
 }
 
@@ -471,6 +466,7 @@ a.post-link:hover .post-title-container {
 @media screen and (max-width: 767px) {
 	.post-title-container {
 		opacity: 1;
+		height: auto;
 		background-color: rgba(0,0,0,0);		
 	}
 	.post-title p {
