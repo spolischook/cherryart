@@ -12,7 +12,10 @@
     <body>
         <header id="header">
             <div class="mobile-header">
-                <button class="toggle-menu">Menu</button>
+                <div class="branding">
+                    <a href="{{ path('art_works', global.request.get('_route_params')|merge({'_locale': 'en'})) }}" title="Home Page"><h3>Cherevan</h3></a>
+                </div>
+                <button class="toggle-menu"><i class="fa fa-bars" aria-hidden="true"></i><i class="fa fa-times" aria-hidden="true"></i></button>
                 <div class="panel">
                     <menu class="nav">
                         <li class="menu-item{% if 'art_works' == global.request.get('_route') %} active{% endif %}">
@@ -40,9 +43,6 @@
                             </li>
                         </menu>
                     </div>
-                </div>
-                <div class="branding">
-                    <a href="{{ path('art_works', global.request.get('_route_params')|merge({'_locale': 'en'})) }}" title="Home Page"><h3>Cherevan</h3></a>
                 </div>
             </div>
             <div class="main-header">
@@ -109,7 +109,6 @@
             </div>
         </footer>
         {% block scripts %}
-            <script src="/jquery.js"></script>
             <script src="/masonry.pkgd.min.js"></script>
             <script src="/imagesloaded.pkgd.min.js"></script>
             <script src="/scripts.js"></script>
@@ -128,6 +127,20 @@
                         }
                     }
                 }
+            </script>
+            <script type="text/javascript">
+                // init Masonry
+                var grid = document.querySelector('.grid');
+                var msnry = new Masonry( grid, {
+                    itemSelector: '.grid-item',
+                    columnWidth: '.grid-sizer',
+                    percentPosition: true
+                });
+
+                imagesLoaded( grid ).on( 'progress', function() {
+                    // layout Masonry after each image loads
+                    msnry.layout();
+                });
             </script>
         {% endblock %}
     </body>

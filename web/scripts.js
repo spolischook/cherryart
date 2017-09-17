@@ -1,20 +1,3 @@
-$(document).ready(function() {
-
-    // Massonry Photo Grid
-
-    var $grid = $('.grid').imagesLoaded( function() {
-        $grid.masonry({
-            itemSelector: '.grid-item',
-            columnWidth: '.grid-sizer',
-            percentPosition: true
-        });
-    });
-
-    var hideMainSwipe = $(".swipe-hide-main");
-    hideMainSwipe.hide();
-
-});
-
 // PhotoSwipe
 
 var initPhotoSwipeFromDOM = function(gallerySelector) {
