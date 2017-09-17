@@ -7,9 +7,9 @@ class FrontendApplication extends Application
     /**
      * {@inheritdoc}
      */
-    public function __construct(array $values = [])
+    public function __construct($env = 'prod', array $values = [])
     {
-        parent::__construct($values);
+        parent::__construct($env, $values);
         $app = $this;
 
         $app->get('/', function () use ($app) {

@@ -3,9 +3,8 @@
 namespace Cherry\Tests;
 
 use Cherry\FrontendApplication;
-use Silex\WebTestCase as BaseWebTestCase;
 
-abstract class WebFrontendTestCase extends BaseWebTestCase
+abstract class WebFrontendTestCase extends WebTestCase
 {
     /**
      * {@inheritdoc}
@@ -25,7 +24,7 @@ abstract class WebFrontendTestCase extends BaseWebTestCase
      */
     public function createApplication()
     {
-        $app = new FrontendApplication();
+        $app = new FrontendApplication('test');
         $app['debug'] = true;
 
         return $app;

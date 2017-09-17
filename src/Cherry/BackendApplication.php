@@ -7,6 +7,7 @@ use Cherry\Command\GenerateThumbnails;
 use Cherry\Command\ImportJomGallery;
 use Cherry\Command\ImportJoomlaArticles;
 use Cherry\Form\ArtWorkType;
+use Cherry\Form\ImagesType;
 use Cherry\Form\NewsExhibitionType;
 use Cherry\Form\PictureType;
 
@@ -15,9 +16,9 @@ class BackendApplication extends Application
     /**
      * {@inheritdoc}
      */
-    public function __construct(array $values = [])
+    public function __construct($env = 'prod', array $values = [])
     {
-        parent::__construct($values);
+        parent::__construct($env, $values);
         $app = $this;
 
         $this->register(new \Silex\Provider\FormServiceProvider());
@@ -48,10 +49,14 @@ class BackendApplication extends Application
         $app['picture_type'] = function ($app) {
             return new PictureType($app['image_handler']);
         };
+        $app['images_type'] = function ($app) {
+            return new ImagesType($app['image_handler']);
+        };
         $app->extend('form.types', function ($types) use ($app) {
             $types[] = 'art_work_type';
             $types[] = 'news_exhibition_type';
             $types[] = $app['picture_type'];
+            $types[] = $app['images_type'];
 
             return $types;
         });

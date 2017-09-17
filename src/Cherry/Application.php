@@ -7,28 +7,53 @@ use Doctrine\DBAL\Connection;
 use Intervention\Image\Image;
 use Silex\Application as BaseApplication;
 use Silex\Application\FormTrait;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Yaml\Yaml;
 
 class Application extends BaseApplication
 {
     use FormTrait;
 
+    const APPLICATION_PATH = __DIR__;
+
     /** @var Connection */
     static public $db;
+
+    private $configPath = __DIR__.'/../../config/parameters_{env}.yml';
+
+    private function configure(Application $app, string $env)
+    {
+        $config = str_replace('{env}', $env, $this->configPath);
+
+        if (!is_file($config)) {
+            throw new FileNotFoundException(sprintf('Config file "%s" not found', $config));
+        }
+
+        $values = Yaml::parse(file_get_contents($config));
+        foreach ($values['parameters'] as $key => $value) {
+            $app[$key] = str_replace('%application_path%', self::APPLICATION_PATH, $value);
+        }
+    }
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(array $values = [])
+    public function __construct($env = 'prod', array $values = [])
     {
         parent::__construct($values);
         $app = $this;
+        $this->configure($app, $env);
 
         $this->register(new \Silex\Provider\TwigServiceProvider(), [
             'twig.path' => __DIR__.'/Resources/views',
             'twig.form.templates' => ['bootstrap_3_layout.html.twig'],
         ]);
+
+        $app->register(new \Silex\Provider\MonologServiceProvider(), array(
+            'monolog.logfile' => __DIR__.'/../../logs/dev.log',
+        ));
 
         $this->register(new \Silex\Provider\LocaleServiceProvider());
         $this->register(new \Silex\Provider\TranslationServiceProvider(), [
@@ -47,7 +72,7 @@ class Application extends BaseApplication
         $this->register(new \Silex\Provider\DoctrineServiceProvider(), array(
             'db.options' => array(
                 'driver'   => 'pdo_sqlite',
-                'path'     => realpath(__DIR__.'/../../app.db'),
+                'path'     => realpath($app['db_path']),
             ),
         ));
         $this['repository_news'] = function ($app) {

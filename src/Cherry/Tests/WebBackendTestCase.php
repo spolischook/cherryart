@@ -3,7 +3,6 @@
 namespace Cherry\Tests;
 
 use Cherry\BackendApplication;
-use Silex\WebTestCase;
 
 abstract class WebBackendTestCase extends WebTestCase
 {
@@ -25,7 +24,7 @@ abstract class WebBackendTestCase extends WebTestCase
      */
     public function createApplication()
     {
-        $app = new BackendApplication();
+        $app = new BackendApplication('test');
         $app['debug'] = true;
         $app['session.test'] = true;
 
