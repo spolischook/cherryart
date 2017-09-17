@@ -35,11 +35,22 @@
                         <menu class="nav">
                             <li class="menu-item lang-widget menu-item-has-a-children">
                                 <menu class="subnav">
-                            <li class="menu-item{% if 'en' == app.translator.locale %} active{% endif %}">
-                                <a href="{{ path(global.request.get('_route'), global.request.get('_route_params')|merge({'_locale': 'en'})) }}" class="menu-link">EN</a>
+                                    <li class="menu-item{% if 'en' == app.translator.locale %} active{% endif %}">
+                                        <a href="{{ path(global.request.get('_route'), global.request.get('_route_params')|merge({'_locale': 'en'})) }}" class="menu-link">EN</a>
+                                    </li>
+                                    <li class="menu-item{% if 'uk' == app.translator.locale %} active{% endif %}">
+                                        <a href="{{ path(global.request.get('_route'), global.request.get('_route_params')|merge({'_locale': 'uk'})) }}" class="menu-link">UK</a>
+                                    </li>
+                                </menu>
                             </li>
-                            <li class="menu-item{% if 'uk' == app.translator.locale %} active{% endif %}">
-                                <a href="{{ path(global.request.get('_route'), global.request.get('_route_params')|merge({'_locale': 'uk'})) }}" class="menu-link">UK</a>
+                            <li class="menu-item search-widget">
+                                <button class="toggle-menu"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                <div class="panel">
+                                    <form class="serach-form">
+                                        <input class="serach-form-input" type="search" name="q" placeholder="search">
+                                        <input class="serach-form-submit" type="submit" value="Submit">
+                                    </form>
+                                </div>
                             </li>
                         </menu>
                     </div>
@@ -68,24 +79,27 @@
                             {#</li>#}
                         </menu>
                     </div>
-                    <div class="e-col hdr-widgeets">
+                    <div class="hdr-widgeets">
                         <menu class="nav">
-                            {#<li class="menu-item search-widget">#}
-                                {#<a href="#" class="menu-link"><i class="fa fa-search" aria-hidden="true"></i></a>#}
-                                {#<form class="serach-form">#}
-                                    {#<input class="serach-form-input" type="search" name="q" placeholder="search">#}
-                                    {#<input class="serach-form-submit" type="submit" value="Submit">#}
-                                {#</form>#}
-                            {#</li>#}
                             <li class="menu-item lang-widget menu-item-has-a-children">
-                                <a href="" class="menu-link">{{ app.translator.locale|upper }}</a> <!--  -->
                                 <menu class="subnav">
-                            <li class="menu-item{% if 'en' == app.translator.locale %} active{% endif %}">
-                                <a href="{{ path(global.request.get('_route'), global.request.get('_route_params')|merge({'_locale': 'en'})) }}" class="menu-link">EN</a>
+                                    <li class="menu-item{% if 'en' == app.translator.locale %} active{% endif %}">
+                                        <a href="{{ path(global.request.get('_route'), global.request.get('_route_params')|merge({'_locale': 'en'})) }}" class="menu-link">EN</a>
+                                    </li>
+                                    <li class="menu-item{% if 'uk' == app.translator.locale %} active{% endif %}">
+                                        <a href="{{ path(global.request.get('_route'), global.request.get('_route_params')|merge({'_locale': 'uk'})) }}" class="menu-link">UK</a>
+                                    </li>
+                                </menu>
                             </li>
-                            <li class="menu-item{% if 'uk' == app.translator.locale %} active{% endif %}">
-                                <a href="{{ path(global.request.get('_route'), global.request.get('_route_params')|merge({'_locale': 'uk'})) }}" class="menu-link">UK</a>
-                            </li>
+                            {#<li class="menu-item search-widget">#}
+                                {#<button class="toggle-menu"><i class="fa fa-search" aria-hidden="true"></i></button>#}
+                                {#<div class="panel">#}
+                                    {#<form class="serach-form">#}
+                                        {#<input class="serach-form-input" type="search" name="q" placeholder="search">#}
+                                        {#<input class="serach-form-submit" type="submit" value="Submit">#}
+                                    {#</form>#}
+                                {#</div>#}
+                            {#</li>#}
                         </menu>
                     </div>
                 </div>
