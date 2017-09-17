@@ -8,3 +8,4 @@
 /webAdmin/assets/
 /images/*
 /logs/*
+/config/parameters_prod.yml

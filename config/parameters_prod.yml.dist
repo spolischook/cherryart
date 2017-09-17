@@ -2,3 +2,4 @@ parameters:
     # Your parameters will be available in Application parameters: $app['parameters']['my_key']
     # And as twig global variables: {{ my_key }}.
   db_path: %application.path%/../../app.db
+  web_image_domain: 'http://images.cherryart.local'
