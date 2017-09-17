@@ -81,11 +81,11 @@ class Application extends BaseApplication
 
         self::$db = $app['db'];
 
-        $this['image_handler'] = function () {
+        $this['image_handler'] = function ($app) {
             return new ImageHandler(
                 realpath(__DIR__.'/../../image_originals'),
                 realpath(__DIR__.'/../../images'),
-                'http://images.cherryart.local',
+                $app['web_image_domain'],
                 [
                     'admin' => function (Image $image) {
                         return $image->heighten(70)->crop(70, 70);
